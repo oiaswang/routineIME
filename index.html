@@ -11,21 +11,20 @@
 
 <style>
   :root {
-    --gold: #C6A24A;
-    --gold-dim: #8F6A2D;
-    --gold-glow: rgba(198,162,74,0.13);
-    --gold-line: rgba(198,162,74,0.2);
-    --gold-glass: rgba(198,162,74,0.055);
-    /* True-black hierarchy (OpenAI-like) */
-    --bg: #000000;
-    --bg2: #050505;
-    --bg3: #0A0A0A;
+    --gold: #C9A84C;
+    --gold-dim: #9A7030;
+    --gold-glow: rgba(201,168,76,0.15);
+    --gold-line: rgba(201,168,76,0.22);
+    --gold-glass: rgba(201,168,76,0.06);
+    --bg: #060606;
+    --bg2: #0d0d0d;
+    --bg3: #131313;
     --glass: rgba(255,255,255,0.025);
     --glass2: rgba(255,255,255,0.05);
     --glass3: rgba(255,255,255,0.075);
-    --text: #F1EADB;
-    --text-dim: rgba(241,234,219,0.36);
-    --text-mid: rgba(241,234,219,0.7);
+    --text: #EDE5D3;
+    --text-dim: rgba(237,229,211,0.38);
+    --text-mid: rgba(237,229,211,0.68);
     --red: #7A1C1C;
     --red-glow: rgba(122,28,28,0.12);
     --r: 16px;
@@ -40,12 +39,7 @@
     --lift-y: -4px;
   }
 
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
   body {
@@ -57,41 +51,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    -webkit-tap-highlight-color: transparent; /* prevent iOS white flash */
-    -webkit-touch-callout: none; /* iOS: prevent callout/ghost highlight */
-  }
-
-  /* Prevent any default "white flash" UI states */
-  :where(a, button, input, textarea, select, summary, [role="button"], .task-item) {
-    -webkit-tap-highlight-color: transparent;
-  }
-  :where(button, input, textarea, select) {
-    background: #000;
-    color: var(--text);
-    border-color: rgba(255,255,255,0.12);
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    background-clip: padding-box;
-  }
-  :where(button, input, textarea, select):focus,
-  :where(button, input, textarea, select):active {
-    background: #000;
-    color: var(--text);
-  }
-  :where(button, input, textarea, select):focus-visible {
-    outline: 2px solid rgba(198,162,74,0.35);
-    outline-offset: 2px;
-  }
-  /* iOS/Safari autofill: keep dark (no yellow/white flash) */
-  input:-webkit-autofill,
-  textarea:-webkit-autofill,
-  select:-webkit-autofill {
-    -webkit-text-fill-color: var(--text) !important;
-    caret-color: var(--text) !important;
-    box-shadow: 0 0 0px 1000px #000 inset !important;
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    transition: background-color 999999s ease-out, color 999999s ease-out;
   }
 
   .scroll-progress {
@@ -113,16 +72,14 @@
     inset: -12% -10% 0;
     z-index: 0;
     pointer-events: none;
-    /* Coherent, UIKit/VisionOS-like depth (no random colors) */
     background:
-      radial-gradient(52% 44% at 18% 10%, rgba(255,255,255,0.035), transparent 68%),
-      radial-gradient(46% 40% at 88% 18%, rgba(198,162,74,0.06), transparent 72%),
-      radial-gradient(40% 36% at 55% 88%, rgba(255,255,255,0.02), transparent 78%),
-      radial-gradient(120% 90% at 50% 50%, rgba(0,0,0,0.86), rgba(0,0,0,1) 68%);
-    opacity: 0.78;
+      radial-gradient(48% 42% at 15% 8%, rgba(201,168,76,0.08), transparent 74%),
+      radial-gradient(40% 36% at 84% 14%, rgba(122,28,28,0.09), transparent 76%),
+      radial-gradient(34% 32% at 58% 76%, rgba(201,168,76,0.05), transparent 80%);
+    opacity: 0.85;
     transform: translate3d(0, 0, 0);
     animation: haloBreath 18s var(--ease-soft) infinite;
-    will-change: opacity;
+    will-change: transform, opacity;
   }
   @keyframes haloBreath {
     0%, 100% { opacity: 0.78; }
@@ -137,7 +94,7 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9998;
-    opacity: 0.45;
+    opacity: 0.55;
   }
 
   /* ── DIAGONAL GRID ── */
@@ -149,8 +106,8 @@
       -55deg,
       transparent,
       transparent 48px,
-      rgba(198,162,74,0.014) 48px,
-      rgba(198,162,74,0.014) 49px
+      rgba(201,168,76,0.018) 48px,
+      rgba(201,168,76,0.018) 49px
     );
     pointer-events: none;
     z-index: 0;
@@ -162,30 +119,29 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.22;
-    contain: paint;
+    opacity: 0.58;
+    will-change: transform, opacity;
   }
   .amb-1 {
-    width: 640px; height: 640px;
-    background: radial-gradient(circle, rgba(198,162,74,0.085) 0%, transparent 68%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, transparent 68%);
     top: -280px; right: -160px;
-    filter: blur(44px);
-    animation: orbOneMove 28s var(--ease-soft) infinite, orbFade 18s ease-in-out infinite;
+    filter: blur(62px);
+    animation: orbOneMove 22s var(--ease-soft) infinite, orbFade 13s ease-in-out infinite;
   }
   .amb-2 {
-    width: 520px; height: 520px;
-    /* remove red cast; keep neutral depth */
-    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-    bottom: 6%; left: -180px;
-    filter: blur(46px);
-    animation: orbTwoMove 34s var(--ease-soft) infinite, orbFade 22s ease-in-out infinite 1.2s;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(122,28,28,0.08) 0%, transparent 70%);
+    bottom: 5%; left: -140px;
+    filter: blur(68px);
+    animation: orbTwoMove 26s var(--ease-soft) infinite, orbFade 15s ease-in-out infinite 1.2s;
   }
   .amb-3 {
-    width: 320px; height: 320px;
-    background: radial-gradient(circle, rgba(198,162,74,0.055) 0%, transparent 72%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
     top: 40%; left: 55%;
-    filter: blur(40px);
-    animation: orbThreeMove 38s var(--ease-soft) infinite, orbFade 26s ease-in-out infinite 1.8s;
+    filter: blur(56px);
+    animation: orbThreeMove 30s var(--ease-soft) infinite, orbFade 17s ease-in-out infinite 1.8s;
   }
   @keyframes orbOneMove {
     0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
@@ -236,10 +192,10 @@
 
   .section-shell {
     background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.005));
-    border: 1px solid rgba(255,255,255,0.055);
+    border: 1px solid rgba(255,255,255,0.05);
     border-radius: 22px;
-    padding: 26px 24px;
-    margin-bottom: 20px;
+    padding: 28px 26px;
+    margin-bottom: 22px;
     position: relative;
     overflow: hidden;
   }
@@ -249,7 +205,7 @@
     inset: 0;
     pointer-events: none;
     background: linear-gradient(120deg, transparent 5%, rgba(201,168,76,0.035) 35%, transparent 70%);
-    opacity: 0.2;
+    opacity: 0.22;
   }
   .idle-drift {
     animation: idleDrift 8.5s ease-in-out infinite;
@@ -257,7 +213,7 @@
   }
   @keyframes idleDrift {
     0%, 100% { transform: translate3d(0, 0, 0); }
-    50% { transform: translate3d(0, -1.6px, 0); }
+    50% { transform: translate3d(0, -2px, 0); }
   }
   .overview-grid {
     display: grid;
@@ -397,42 +353,21 @@
   .insights-section { margin-bottom: 64px; }
 
   .insight-card {
-    /* VisionOS-like glass: clean, near-white translucency over true black */
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.03)),
-      rgba(255,255,255,0.02);
-    backdrop-filter: blur(26px) saturate(1.22);
-    -webkit-backdrop-filter: blur(26px) saturate(1.22);
-    border: 1px solid rgba(255,255,255,0.085);
+    background: var(--glass);
+    backdrop-filter: blur(24px) saturate(1.1);
+    -webkit-backdrop-filter: blur(24px) saturate(1.1);
+    border: 1px solid var(--gold-line);
     border-radius: var(--r);
+    padding: 36px 40px;
     margin-bottom: 16px;
     position: relative;
     overflow: hidden;
-    transition: border-color var(--dur-mid), background var(--dur-mid), box-shadow var(--dur-mid);
+    transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), background var(--dur-mid), box-shadow var(--dur-mid);
     cursor: default;
+    transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + 0px), 0);
     background-clip: padding-box;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-  }
-  .insight-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    /* inner highlight + top light, avoids patchy blobs */
-    background:
-      radial-gradient(120% 80% at 18% 0%, rgba(255,255,255,0.08), transparent 55%),
-      linear-gradient(180deg, rgba(255,255,255,0.05), transparent 40%),
-      linear-gradient(120deg, rgba(255,255,255,0.06), transparent 18%, transparent 78%, rgba(255,255,255,0.03));
-    opacity: 0.55;
-    mix-blend-mode: screen;
-  }
-  /* iOS Safari stability: keep blur layer transform-free; move motion to inner surface */
-  .insight-surface {
-    padding: 36px 40px;
-    transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + 0px), 0);
-    transition: transform var(--dur-mid) var(--ease-soft);
-    will-change: transform;
   }
   .insight-card::before {
     content: '';
@@ -443,8 +378,13 @@
     opacity: 0;
     transition: opacity 0.45s;
   }
-  /* Insight cards are passive reading surfaces (no hover/tap feedback). */
-  .insight-card::before { opacity: 0.55; }
+  .insight-card:hover::before { opacity: 1; }
+  .insight-card:hover {
+    transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + var(--lift-y)), 0) scale(1.003);
+    border-color: rgba(201,168,76,0.4);
+    background: var(--glass2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.08) inset;
+  }
 
   .insight-corner {
     position: absolute;
@@ -460,7 +400,7 @@
     user-select: none;
     letter-spacing: -0.05em;
   }
-  .insight-card:hover .insight-corner { opacity: 0.04; }
+  .insight-card:hover .insight-corner { opacity: 0.08; }
 
   .insight-tag {
     font-family: 'Space Mono', monospace;
@@ -506,21 +446,17 @@
   /* ── PROGRESS BAR ── */
   .progress-bar-wrap {
     margin: 0 0 44px;
-    background: color-mix(in srgb, #000 88%, var(--glass) 12%);
-    backdrop-filter: blur(12px) saturate(1.04);
-    -webkit-backdrop-filter: blur(12px) saturate(1.04);
+    padding: 22px 28px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: var(--r-sm);
-    transition: border-color var(--dur-mid), box-shadow var(--dur-mid);
+    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+    transition: border-color var(--dur-mid), box-shadow var(--dur-mid), transform var(--dur-mid) var(--ease-soft);
     background-clip: padding-box;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-  }
-  .progress-surface {
-    padding: 22px 28px;
-    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
-    transition: transform var(--dur-mid) var(--ease-soft);
-    will-change: transform;
   }
   .progress-helper {
     background: var(--glass);
@@ -613,8 +549,8 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 16px;
     background: var(--gold-glass);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     flex-shrink: 0;
     background-clip: padding-box;
     -webkit-backface-visibility: hidden;
@@ -642,7 +578,7 @@
     align-items: flex-start;
     gap: 16px;
     padding: 18px 22px;
-    background: color-mix(in srgb, #000 90%, var(--glass) 10%);
+    background: var(--glass);
     border: 1px solid rgba(255,255,255,0.045);
     border-radius: var(--r-sm);
     cursor: pointer;
@@ -651,10 +587,7 @@
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
     min-height: 66px;
-    background-color: rgba(255,255,255,0.02); /* explicit base: avoids iOS white/gray flash */
   }
   .task-item::before {
     content: '';
@@ -669,21 +602,16 @@
   }
   .task-item:hover {
     background: var(--glass2);
-    background-color: rgba(255,255,255,0.045);
     border-color: rgba(255,255,255,0.08);
     transform: translate3d(2px, 0, 0);
   }
   .task-item:hover::before { transform: scaleY(1); }
-  .task-item.is-pressed {
-    transform: translate3d(2px, 0, 0) scale(0.992);
-    background-color: rgba(255,255,255,0.055);
-  }
+  .task-item.is-pressed { transform: translate3d(2px, 0, 0) scale(0.992); }
   .magnetic { transition: transform 220ms var(--ease-soft); }
 
   .task-item.checked {
     background: rgba(201,168,76,0.04);
     border-color: rgba(201,168,76,0.14);
-    background-color: rgba(201,168,76,0.04);
   }
   .task-item.checked::before { transform: scaleY(1); opacity: 0.5; }
 
@@ -803,7 +731,7 @@
     align-items: center;
     gap: 10px;
     background: rgba(122,28,28,0.07);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(122,28,28,0.22);
     border-radius: var(--r-sm);
     padding: 12px 18px;
@@ -828,23 +756,19 @@
   .footer-philosophy {
     margin-top: 10px;
     padding: 52px 48px;
-    background: color-mix(in srgb, #000 86%, var(--glass) 14%);
-    backdrop-filter: blur(16px) saturate(1.06);
-    -webkit-backdrop-filter: blur(16px) saturate(1.06);
+    background: var(--glass);
+    backdrop-filter: blur(28px) saturate(1.15);
+    -webkit-backdrop-filter: blur(28px) saturate(1.15);
     border: 1px solid var(--gold-line);
     border-radius: var(--r);
     text-align: center;
     position: relative;
     overflow: hidden;
-    transition: border-color var(--dur-mid), box-shadow var(--dur-mid);
+    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+    transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), box-shadow var(--dur-mid);
     background-clip: padding-box;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-  }
-  .footer-surface {
-    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
-    transition: transform var(--dur-mid) var(--ease-soft);
-    will-change: transform;
   }
   .footer-philosophy::before {
     content: '';
@@ -855,7 +779,19 @@
     opacity: 0.7;
   }
   .footer-philosophy::after {
-    content: none;
+    content: 'REGIME';
+    position: absolute;
+    bottom: -20px; left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: 120px;
+    color: var(--gold);
+    opacity: 0.018;
+    letter-spacing: -0.03em;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
   }
 
   .fp-quote {
@@ -920,25 +856,25 @@
     .overview-grid { grid-template-columns: 1fr; gap: 12px; }
     .progress-stack { position: static; top: auto; }
     .routine-grid { grid-template-columns: 1fr; gap: 10px; }
-    .insight-surface { padding: 24px 20px; }
+    .insight-card { padding: 24px 20px; }
     .footer-philosophy { padding: 36px 26px; }
     .task-item { padding: 15px 16px; }
     .task-item { min-height: 72px; border-color: rgba(255,255,255,0.06); }
     .task-title { font-size: 14px; line-height: 1.45; }
     .task-time { font-size: 10px; }
     .task-sub { font-size: 11px; line-height: 1.6; }
-    .progress-surface { padding: 18px 20px; }
+    .progress-bar-wrap { padding: 18px 20px; }
     .period-header { margin-bottom: 12px; }
     .task-list { gap: 8px; }
     .insight-text { line-height: 1.74; font-size: 13.5px; }
-    .amb-1 { width: 340px; height: 340px; filter: blur(28px); top: -150px; right: -140px; opacity: 0.18; }
-    .amb-2 { width: 240px; height: 240px; filter: blur(26px); bottom: 6%; left: -120px; opacity: 0.14; }
+    .amb-1 { width: 360px; height: 360px; filter: blur(36px); top: -160px; right: -120px; opacity: 0.44; }
+    .amb-2 { width: 250px; height: 250px; filter: blur(34px); bottom: 4%; left: -100px; opacity: 0.4; }
     .amb-3 { display: none; }
-    .bg-halo { opacity: 0.58; animation-duration: 24s; }
+    .bg-halo { opacity: 0.56; animation-duration: 22s; }
     .insight-card,
     .progress-bar-wrap,
     .progress-helper,
-    .footer-philosophy { backdrop-filter: blur(18px) saturate(1.16); -webkit-backdrop-filter: blur(18px) saturate(1.16); }
+    .footer-philosophy { backdrop-filter: blur(8px) saturate(1.02); -webkit-backdrop-filter: blur(8px) saturate(1.02); }
     .progress-helper { backdrop-filter: none; -webkit-backdrop-filter: none; }
     .task-badge { backdrop-filter: none; -webkit-backdrop-filter: none; }
     .insight-corner { opacity: 0.03; }
@@ -951,7 +887,7 @@
   }
 
   @media (hover: none), (pointer: coarse) {
-    .insight-card:hover .insight-surface { transform: none; }
+    .insight-card:hover,
     .task-item:hover { transform: none; }
     .insight-card::before { opacity: 0.5; }
     .magnetic { transition: none; }
@@ -987,32 +923,19 @@
   /* Correções específicas para iOS Safari com blur+transparência */
   @supports (-webkit-touch-callout: none) {
     body::before { opacity: 0.36; }
-    /* iOS: keep background super stable + cheaper to composite */
-    .ambient { display: none; }
-    .bg-halo { opacity: 0.62; }
     .insight-card,
     .progress-bar-wrap,
     .footer-philosophy {
-      /* iOS: lower blur + force stable compositing (prevents white flash) */
-      -webkit-backdrop-filter: blur(8px) saturate(1.01);
-      backdrop-filter: blur(8px) saturate(1.01);
-      /* Workaround para artefatos "white bubble/box" em camadas com blur + transform */
-      -webkit-mask-image: -webkit-radial-gradient(white, black);
-      mask-image: radial-gradient(white, black);
+      -webkit-backdrop-filter: blur(10px) saturate(1.02);
+      backdrop-filter: blur(10px) saturate(1.02);
     }
-    .insight-surface,
-    .progress-surface,
-    .footer-surface { transform: translateZ(0); }
     .period-icon,
     .task-badge,
     .blocker-notice {
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
-      background: rgba(255,255,255,0.025);
+      background: rgba(255,255,255,0.03);
     }
-    .magnetic { transition: none !important; }
-    .insight-card { --tilt-transform: none !important; }
-    .insight-surface { transform: translate3d(0, 0, 0) !important; }
   }
 
   /* ── SCROLLBAR ── */
@@ -1021,7 +944,10 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-line); border-radius: 2px; }
 
   /* ── SELECTION ── */
-  ::selection { background: rgba(198,162,74,0.16); color: var(--text); }
+  ::selection {
+    background: rgba(201,168,76,0.2);
+    color: var(--text);
+  }
 </style>
 </head>
 <body>
@@ -1056,11 +982,10 @@
     <div class="insights-section motion-sync section-shell idle-drift" data-sync="bg" data-depth="0.92" style="--idle-delay: .2s;">
       <div class="section-label sr">// pensamento estratégico</div>
 
-    <div class="insight-card">
-      <div class="insight-surface sr sr-delay-1">
-        <div class="insight-corner">"</div>
-        <div class="insight-tag">Eternidade & Poder</div>
-        <p class="insight-text">
+    <div class="insight-card sr sr-delay-1 magnetic">
+      <div class="insight-corner">"</div>
+      <div class="insight-tag">Eternidade & Poder</div>
+      <p class="insight-text">
         <em>"Tornar-se um demônio"</em> e <em>"viver para sempre"</em> são figuras de linguagem —
         o demônio é a maldade, a eternidade é ser <strong>lembrado</strong>.
         Enquanto os bons somem dos livros de história,
@@ -1071,15 +996,13 @@
         Maquiavel já sabia: <em>o príncipe que age pela virtude pode perder o poder;
         o que age pela necessidade, o mantém.</em>
         Bem e mal não são opostos — são apenas perspectivas de quem escreve a história.
-        </p>
-      </div>
+      </p>
     </div>
 
-    <div class="insight-card">
-      <div class="insight-surface sr sr-delay-2">
-        <div class="insight-corner">$</div>
-        <div class="insight-tag">Dinheiro & Liberdade</div>
-        <p class="insight-text">
+    <div class="insight-card sr sr-delay-2 magnetic">
+      <div class="insight-corner">$</div>
+      <div class="insight-tag">Dinheiro & Liberdade</div>
+      <p class="insight-text">
         <strong>O dinheiro é desejo, e o desejo é o dinheiro.</strong>
         Dinheiro não é apenas papel — é prata, ouro e, sobretudo,
         <em>livre-arbítrio</em>.
@@ -1089,15 +1012,13 @@
         Se deixar seus desejos conduzirem suas escolhas, o dinheiro o dominará —
         e você trabalhará a vida toda para sustentar ilusões.
         <strong>Seja mestre do seu dinheiro. Nunca seu escravo.</strong>
-        </p>
-      </div>
+      </p>
     </div>
 
-    <div class="insight-card">
-      <div class="insight-surface sr sr-delay-3">
-        <div class="insight-corner">∞</div>
-        <div class="insight-tag">Natureza Humana</div>
-        <p class="insight-text">
+    <div class="insight-card sr sr-delay-3 magnetic">
+      <div class="insight-corner">∞</div>
+      <div class="insight-tag">Natureza Humana</div>
+      <p class="insight-text">
         Maquiavel escreveu que os homens esquecem mais facilmente a morte do pai
         do que a perda do patrimônio.
         Nietzsche disse que o homem que tem um <em>porquê</em> suporta qualquer <em>como</em>.
@@ -1107,22 +1028,19 @@
         O homem lúcido não é nem bom nem mau. Ele é <em>estratégico</em>.
         Conhece as regras. Sabe quando quebrá-las. E sabe que a história
         é escrita pelos que sobrevivem, não pelos que obedeceram.
-        </p>
-      </div>
+      </p>
     </div>
     </div>
 
     <aside class="progress-stack sr sync-node" data-sync="fg" data-depth="0.96">
       <!-- PROGRESS -->
-      <div class="progress-bar-wrap section-shell idle-drift" style="--idle-delay: .9s;">
-        <div class="progress-surface magnetic">
-          <div class="progress-label">
-            <span>// progresso do dia</span>
-            <span class="progress-pct" id="pctLabel">0%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
+      <div class="progress-bar-wrap section-shell magnetic idle-drift" style="--idle-delay: .9s;">
+        <div class="progress-label">
+          <span>// progresso do dia</span>
+          <span class="progress-pct" id="pctLabel">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
         </div>
       </div>
 
@@ -1340,209 +1258,292 @@
   <div class="divider sr sync-node" data-sync="stable" data-depth="0.72"></div>
 
   <!-- FOOTER PHILOSOPHY -->
-  <div class="footer-philosophy sr sync-node idle-drift" data-sync="bg" data-depth="0.86" style="--idle-delay: 2s;">
-    <div class="footer-surface magnetic">
-      <p class="fp-quote">
-        "O homem que conhece as regras e escolhe quando quebrá-las
-        não é nem bom nem mau —
-        é <em>livre</em>."
-      </p>
-      <div class="fp-author">— @rvrenr / regime</div>
-    </div>
+  <div class="footer-philosophy sr sync-node magnetic idle-drift" data-sync="bg" data-depth="0.86" style="--idle-delay: 2s;">
+    <p class="fp-quote">
+      "O homem que conhece as regras e escolhe quando quebrá-las
+      não é nem bom nem mau —
+      é <em>livre</em>."
+    </p>
+    <div class="fp-author">— @rvrenr / regime</div>
   </div>
 
 </div><!-- /wrapper -->
 
 <script>
-const STORAGE_KEY = 'rvrenr_regime_v2';
-const today = new Date().toISOString().split('T')[0];
+  const STORAGE_KEY = 'rvrenr_regime_v2';
+  const today = new Date().toISOString().split('T')[0];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  let targetProgress = 0;
+  let shownProgress = 0;
+  let progressRaf = null;
 
-let targetProgress = 0;
-let shownProgress = 0;
-let progressRaf = null;
+  (function initTitle() {
+    const title = document.getElementById('mainTitle');
+    if (!title) return;
+    const word = 'REGIME';
+    title.innerHTML = '';
+    const goldGroup = document.createElement('span');
+    goldGroup.className = 'gold-word';
+    goldGroup.style.display = 'inline';
 
-(function initTitle() {
-  const title = document.getElementById('mainTitle');
-  if (!title) return;
-  const word = 'REGIME';
-  title.innerHTML = '';
-
-  const goldGroup = document.createElement('span');
-  goldGroup.className = 'gold-word';
-  goldGroup.style.display = 'inline';
-
-  word.split('').forEach((ch, i) => {
-    const span = document.createElement('span');
-    span.className = 'char';
-    span.textContent = ch;
-    span.style.animationDelay = (0.06 + i * 0.075) + 's';
-
-    if (i < 3) goldGroup.appendChild(span);
-    else {
-      if (i === 3) title.appendChild(goldGroup);
-      title.appendChild(span);
-    }
-  });
-})();
-
-function loadState() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-  catch { return {}; }
-}
-
-function saveState(state) {
-  try {
-    state._date = today;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {}
-}
-
-function renderProgress(pct) {
-  const fill = document.getElementById('progressFill');
-  const label = document.getElementById('pctLabel');
-  const wrap = document.querySelector('.progress-bar-wrap');
-  if (!fill || !label || !wrap) return;
-
-  fill.style.transform = `scaleX(${pct / 100})`;
-  label.textContent = `${Math.round(pct)}%`;
-
-  fill.classList.toggle('has-progress', pct > 0);
-  wrap.classList.toggle('is-complete', pct >= 100);
-}
-
-function animateProgressTo(target) {
-  targetProgress = target;
-  if (progressRaf) return;
-
-  const tick = () => {
-    shownProgress += (targetProgress - shownProgress) * 0.16;
-
-    if (Math.abs(targetProgress - shownProgress) < 0.08) {
-      shownProgress = targetProgress;
-    }
-
-    renderProgress(shownProgress);
-
-    if (shownProgress !== targetProgress) {
-      progressRaf = requestAnimationFrame(tick);
-    } else {
-      progressRaf = null;
-    }
-  };
-
-  progressRaf = requestAnimationFrame(tick);
-}
-
-function updateProgress() {
-  const items = document.querySelectorAll('.task-item');
-  const checked = document.querySelectorAll('.task-item.checked').length;
-  const pct = Math.round((checked / items.length) * 100);
-  animateProgressTo(pct);
-}
-
-function toggleTask(el) {
-  const wasChecked = el.classList.contains('checked');
-  el.classList.toggle('checked');
-
-  if (!wasChecked) {
-    el.classList.add('just-checked');
-    setTimeout(() => el.classList.remove('just-checked'), 600);
-  }
-
-  const id = el.dataset.id;
-  const state = loadState();
-  state[id] = el.classList.contains('checked');
-  saveState(state);
-
-  updateProgress();
-}
-
-function restoreState() {
-  const state = loadState();
-  document.querySelectorAll('.task-item').forEach(el => {
-    if (state[el.dataset.id]) el.classList.add('checked');
-  });
-  updateProgress();
-}
-
-function initScrollReveal() {
-  const els = document.querySelectorAll('.sr');
-
-  els.forEach((el, i) => {
-    el.style.transitionDelay = `${Math.min(280, i * 28)}ms`;
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+    word.split('').forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch;
+      span.style.animationDelay = (0.06 + i * 0.075) + 's';
+      if (i < 3) goldGroup.appendChild(span);
+      else {
+        if (i === 3) title.appendChild(goldGroup);
+        title.appendChild(span);
       }
     });
-  }, { threshold: 0.09, rootMargin: '0px 0px -10% 0px' });
+  })();
 
-  els.forEach(el => observer.observe(el));
-}
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
 
-function initTaskPressFeedback() {
-  const items = document.querySelectorAll('.task-item');
+  function saveState(state) {
+    try {
+      state._date = today;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {}
+  }
 
-  items.forEach(item => {
-    let timer = null;
+  function renderProgress(pct) {
+    const fill = document.getElementById('progressFill');
+    const label = document.getElementById('pctLabel');
+    const wrap = document.querySelector('.progress-bar-wrap');
+    if (!fill || !label || !wrap) return;
+    fill.style.transform = `scaleX(${pct / 100})`;
+    label.textContent = `${Math.round(pct)}%`;
+    fill.classList.toggle('has-progress', pct > 0);
+    wrap.classList.toggle('is-complete', pct >= 100);
+  }
 
-    const clear = () => {
-      item.classList.remove('is-pressed');
-      if (timer) clearTimeout(timer);
+  function animateProgressTo(target) {
+    targetProgress = target;
+    if (progressRaf) return;
+    const tick = () => {
+      shownProgress += (targetProgress - shownProgress) * 0.16;
+      if (Math.abs(targetProgress - shownProgress) < 0.08) {
+        shownProgress = targetProgress;
+      }
+      renderProgress(shownProgress);
+      if (shownProgress !== targetProgress) {
+        progressRaf = requestAnimationFrame(tick);
+      } else {
+        progressRaf = null;
+      }
+    };
+    progressRaf = requestAnimationFrame(tick);
+  }
+
+  function updateProgress() {
+    const items = document.querySelectorAll('.task-item');
+    const checked = document.querySelectorAll('.task-item.checked').length;
+    const pct = Math.round((checked / items.length) * 100);
+    animateProgressTo(pct);
+  }
+
+  function toggleTask(el) {
+    const wasChecked = el.classList.contains('checked');
+    el.classList.toggle('checked');
+    if (!wasChecked) {
+      el.classList.add('just-checked');
+      setTimeout(() => el.classList.remove('just-checked'), 600);
+    }
+    const id = el.dataset.id;
+    const state = loadState();
+    state[id] = el.classList.contains('checked');
+    saveState(state);
+    updateProgress();
+  }
+
+  function restoreState() {
+    const state = loadState();
+    document.querySelectorAll('.task-item').forEach(el => {
+      if (state[el.dataset.id]) el.classList.add('checked');
+    });
+    updateProgress();
+  }
+
+  function initScrollReveal() {
+    const els = document.querySelectorAll('.sr');
+    els.forEach((el, i) => {
+      // Stagger dinâmico para dar sensação de fluxo contínuo entre blocos.
+      el.style.transitionDelay = `${Math.min(280, i * 28)}ms`;
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.09, rootMargin: '0px 0px -10% 0px' });
+    els.forEach(el => observer.observe(el));
+  }
+
+  function initTaskPressFeedback() {
+    const items = document.querySelectorAll('.task-item');
+    items.forEach(item => {
+      item.addEventListener('pointerdown', () => item.classList.add('is-pressed'), { passive: true });
+      const clear = () => item.classList.remove('is-pressed');
+      item.addEventListener('pointerup', clear, { passive: true });
+      item.addEventListener('pointercancel', clear, { passive: true });
+      item.addEventListener('pointerleave', clear, { passive: true });
+    });
+  }
+
+  function initDepthTilt() {
+    if (!finePointer || reduceMotion) return;
+    const cards = document.querySelectorAll('.insight-card');
+    cards.forEach(card => {
+      const maxTilt = 3.2;
+      card.addEventListener('pointermove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        const rx = -(py * maxTilt);
+        const ry = px * maxTilt;
+        card.style.setProperty('--tilt-transform', `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`);
+      }, { passive: true });
+      card.addEventListener('pointerleave', () => {
+        card.style.removeProperty('--tilt-transform');
+      }, { passive: true });
+    });
+  }
+
+  function initMagneticHover() {
+    if (!finePointer || reduceMotion) return;
+    const magnets = document.querySelectorAll('.magnetic');
+    magnets.forEach(el => {
+      const strength = el.classList.contains('insight-card') ? 3.1 : 2.4;
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width - 0.5) * strength;
+        const y = ((e.clientY - r.top) / r.height - 0.5) * strength;
+        el.style.setProperty('--mx', `${x.toFixed(2)}px`);
+        el.style.setProperty('--my', `${y.toFixed(2)}px`);
+      }, { passive: true });
+      el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--mx', '0px');
+        el.style.setProperty('--my', '0px');
+      }, { passive: true });
+    });
+  }
+
+  function initScrollMotionSystem() {
+    const progress = document.getElementById('scrollProgress');
+    const bgHalo = document.querySelector('.bg-halo');
+    const syncNodes = Array.from(document.querySelectorAll('[data-sync]')).map(el => ({
+      el,
+      role: el.dataset.sync || 'stable',
+      depth: Math.max(0.45, Math.min(1.35, parseFloat(el.dataset.depth || '1')))
+    }));
+    if (!progress) return;
+
+    let targetY = window.scrollY || window.pageYOffset;
+    let smoothY = targetY;
+    let prevY = smoothY;
+    let rafId = null;
+    let settleFrames = 0;
+    let viewportH = window.innerHeight || 1;
+    const mobileFactor = coarsePointer ? 0.58 : 1;
+
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+    const start = () => {
+      if (rafId) return;
+      // will-change sob demanda para reduzir custo constante de composição.
+      syncNodes.forEach(node => { node.el.style.willChange = 'transform, opacity'; });
+      if (bgHalo) bgHalo.style.willChange = 'transform, opacity';
+      rafId = requestAnimationFrame(tick);
     };
 
-    const press = () => {
-      item.classList.add('is-pressed');
-      timer = setTimeout(clear, 140);
+    const applySyncMotion = (velocity) => {
+      const direction = velocity > 0 ? 1 : -1;
+      const vel = clamp(velocity, -10, 10);
+      syncNodes.forEach(node => {
+        let base = 0;
+        let velInfluence = 0;
+        if (node.role === 'fg') {
+          base = -(smoothY * 0.0022 * node.depth);
+          velInfluence = direction > 0 ? vel * 0.38 : vel * 0.24;
+        } else if (node.role === 'bg') {
+          base = smoothY * 0.0015 * node.depth;
+          velInfluence = direction > 0 ? vel * 0.16 : vel * 0.3;
+        } else {
+          base = smoothY * 0.0006 * node.depth;
+          velInfluence = vel * 0.1;
+        }
+        const y = (base + velInfluence) * mobileFactor;
+        node.el.style.setProperty('--sync-y', `${y.toFixed(3)}px`);
+      });
     };
 
-    item.addEventListener('pointerdown', press, { passive: true });
-    item.addEventListener('pointerup', clear, { passive: true });
-    item.addEventListener('pointercancel', clear, { passive: true });
-    item.addEventListener('pointerleave', clear, { passive: true });
-    item.addEventListener('touchend', clear, { passive: true });
+    const tick = () => {
+      smoothY += (targetY - smoothY) * 0.14;
+      const velocity = smoothY - prevY;
+      prevY = smoothY;
+
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportH);
+      const scrollPct = clamp(smoothY / maxScroll, 0, 1);
+      progress.style.transform = `scaleX(${scrollPct.toFixed(4)})`;
+
+      if (!reduceMotion) {
+        if (bgHalo) {
+          bgHalo.style.transform = `translate3d(0, ${(smoothY * 0.0042 * mobileFactor).toFixed(3)}px, 0)`;
+        }
+        applySyncMotion(velocity);
+      }
+
+      const settled = Math.abs(targetY - smoothY) < 0.08 && Math.abs(velocity) < 0.04;
+      settleFrames = settled ? settleFrames + 1 : 0;
+      if (settleFrames < 8) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        syncNodes.forEach(node => { node.el.style.willChange = ''; });
+        if (bgHalo) bgHalo.style.willChange = '';
+        rafId = null;
+      }
+    };
+
+    const onScroll = () => {
+      targetY = window.scrollY || window.pageYOffset;
+      start();
+    };
+
+    const onResize = () => {
+      viewportH = window.innerHeight || 1;
+      targetY = window.scrollY || window.pageYOffset;
+      smoothY = targetY;
+      prevY = smoothY;
+      start();
+    };
+
+    viewportH = window.innerHeight || 1;
+    start();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    restoreState();
+    initScrollReveal();
+    initTaskPressFeedback();
+    initDepthTilt();
+    initMagneticHover();
+    initScrollMotionSystem();
   });
-}
-
-function initScrollMotionSystem() {
-  const progress = document.getElementById('scrollProgress');
-  if (!progress) return;
-
-  let targetY = window.scrollY;
-  let smoothY = targetY;
-
-  const tick = () => {
-    smoothY += (targetY - smoothY) * 0.14;
-
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = Math.max(0, Math.min(1, smoothY / maxScroll));
-
-    progress.style.transform = `scaleX(${pct})`;
-
-    requestAnimationFrame(tick);
-  };
-
-  window.addEventListener('scroll', () => {
-    targetY = window.scrollY;
-  }, { passive: true });
-
-  tick();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  restoreState();
-  initScrollReveal();
-  initTaskPressFeedback();
-  initScrollMotionSystem();
-});
 </script>
 </body>
 </html>
