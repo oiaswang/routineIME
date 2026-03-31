@@ -13,19 +13,19 @@
   :root {
     --gold: #C9A84C;
     --gold-dim: #9A7030;
+    --gold-bright: #EDD17A;
     --gold-glow: rgba(201,168,76,0.15);
-    --gold-line: rgba(201,168,76,0.22);
+    --gold-line: rgba(201,168,76,0.2);
     --gold-glass: rgba(201,168,76,0.06);
     --bg: #060606;
     --bg2: #0d0d0d;
     --bg3: #131313;
-    /* FIX: glass vars agora usam cor escura explícita em vez de branco com alpha */
-    --glass:  rgba(18, 16, 12, 0.72);
-    --glass2: rgba(22, 20, 15, 0.82);
-    --glass3: rgba(28, 25, 18, 0.88);
+    --glass:  rgba(14, 12, 9, 0.80);
+    --glass2: rgba(18, 16, 11, 0.88);
+    --glass3: rgba(22, 20, 14, 0.92);
     --text: #EDE5D3;
-    --text-dim: rgba(237,229,211,0.38);
-    --text-mid: rgba(237,229,211,0.68);
+    --text-dim: rgba(237,229,211,0.36);
+    --text-mid: rgba(237,229,211,0.66);
     --red: #7A1C1C;
     --red-glow: rgba(122,28,28,0.12);
     --r: 16px;
@@ -54,16 +54,16 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* ── SCROLL PROGRESS ── */
   .scroll-progress {
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 2px;
+    top: 0; left: 0;
+    height: 1.5px;
     width: 100%;
     transform-origin: 0 50%;
     transform: scaleX(0);
-    background: linear-gradient(90deg, var(--gold-dim), var(--gold), #EDD17A);
-    box-shadow: 0 0 16px rgba(201,168,76,0.38);
+    background: linear-gradient(90deg, transparent, var(--gold-dim) 20%, var(--gold) 50%, var(--gold-bright) 80%, transparent);
+    box-shadow: 0 0 12px rgba(201,168,76,0.5);
     z-index: 10000;
     pointer-events: none;
     will-change: transform;
@@ -77,23 +77,19 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9998;
-    opacity: 0.55;
+    opacity: 0.5;
   }
 
-  /* ── DIAGONAL GRID ── */
+  /* ── DOT GRID (Vercel-style) ── */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: repeating-linear-gradient(
-      -55deg,
-      transparent,
-      transparent 48px,
-      rgba(201,168,76,0.018) 48px,
-      rgba(201,168,76,0.018) 49px
-    );
+    background-image: radial-gradient(circle, rgba(201,168,76,0.052) 1px, transparent 1px);
+    background-size: 28px 28px;
     pointer-events: none;
     z-index: 0;
+    opacity: 0.8;
   }
 
   /* ── AMBIENT ORBS ── */
@@ -102,33 +98,33 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    will-change: transform, opacity;
+    will-change: transform;
   }
   .amb-1 {
     width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, transparent 68%);
+    background: radial-gradient(circle, rgba(201,168,76,0.075) 0%, transparent 68%);
     top: -280px; right: -160px;
-    filter: blur(80px);
-    animation: breathe 10s ease-in-out infinite;
+    filter: blur(90px);
+    animation: breathe 11s ease-in-out infinite;
   }
   .amb-2 {
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(122,28,28,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(122,28,28,0.07) 0%, transparent 70%);
     bottom: 5%; left: -140px;
-    filter: blur(90px);
-    animation: breathe 12s ease-in-out infinite 5s;
+    filter: blur(100px);
+    animation: breathe 13s ease-in-out infinite 5s;
   }
   .amb-3 {
     width: 300px; height: 300px;
     background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
     top: 40%; left: 55%;
     filter: blur(70px);
-    animation: breathe 14s ease-in-out infinite 2s;
+    animation: breathe 15s ease-in-out infinite 2s;
   }
   @keyframes breathe {
-    0%, 100% { opacity: 0.6; transform: scale(1) translate(0, 0); }
-    33% { opacity: 0.9; transform: scale(1.06) translate(10px, -10px); }
-    66% { opacity: 0.7; transform: scale(0.97) translate(-8px, 5px); }
+    0%, 100% { opacity: 0.55; transform: scale(1) translate(0, 0); }
+    33% { opacity: 0.85; transform: scale(1.06) translate(10px, -10px); }
+    66% { opacity: 0.65; transform: scale(0.97) translate(-8px, 5px); }
   }
 
   /* ── FLOATING LINES (decorative) ── */
@@ -152,33 +148,37 @@
     padding: 0 28px 140px;
   }
 
-  .motion-sync {
-    transform: translate3d(0, var(--sync-y, 0px), 0) scale(var(--sync-scale, 1));
-    opacity: var(--sync-o, 1);
-  }
-
+  /* ── SECTION SHELL ── */
   .section-shell {
-    background: linear-gradient(180deg, rgba(20,18,13,0.85), rgba(14,13,10,0.9));
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(18,16,12,0.9), rgba(12,11,8,0.94));
+    border: 1px solid rgba(255,255,255,0.055);
+    border-top-color: rgba(255,255,255,0.075);
+    border-radius: 20px;
     padding: 28px 26px;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     position: relative;
-    /* FIX: removido overflow:hidden — era o principal culpado no WebKit/Safari iOS.
-       O efeito de brilho interno foi movido para ::before com border-radius */
+    transition: border-color var(--dur-mid) var(--ease-soft);
   }
   .section-shell::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 22px;
+    border-radius: 20px;
     pointer-events: none;
-    background: linear-gradient(120deg, transparent 5%, rgba(201,168,76,0.035) 35%, transparent 70%);
-    opacity: 0.22;
-    /* FIX: z-index negativo garante que não bloqueia filhos */
+    background: linear-gradient(160deg, rgba(201,168,76,0.028) 0%, transparent 55%);
     z-index: 0;
   }
-  /* FIX: todos os filhos diretos do section-shell precisam de z-index relativo */
+  /* Top highlight line */
+  .section-shell::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 12%; right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.065) 40%, rgba(201,168,76,0.12) 60%, transparent);
+    border-radius: 1px;
+    pointer-events: none;
+    z-index: 1;
+  }
   .section-shell > * {
     position: relative;
     z-index: 1;
@@ -193,6 +193,7 @@
     0%, 100% { transform: translate3d(0, 0, 0); }
     50% { transform: translate3d(0, -2px, 0); }
   }
+
   .overview-grid {
     display: grid;
     grid-template-columns: 1.45fr 1fr;
@@ -220,7 +221,6 @@
     position: relative;
   }
 
-  /* Watermark stamp */
   .watermark {
     font-family: 'Space Mono', monospace;
     font-size: 10px;
@@ -269,7 +269,7 @@
     will-change: transform, opacity, filter;
   }
   .main-title .gold-word {
-    background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 45%, #EDD17A 75%, var(--gold) 100%);
+    background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 45%, var(--gold-bright) 75%, var(--gold) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -303,7 +303,12 @@
     width: 4px; height: 4px;
     background: var(--gold);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--gold);
+    box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(201,168,76,0.3);
+    animation: dividerPulse 3s ease-in-out infinite;
+  }
+  @keyframes dividerPulse {
+    0%, 100% { box-shadow: 0 0 6px var(--gold), 0 0 14px rgba(201,168,76,0.25); }
+    50% { box-shadow: 0 0 12px var(--gold), 0 0 28px rgba(201,168,76,0.45); opacity: 0.75; }
   }
 
   /* ── SECTION LABEL ── */
@@ -314,7 +319,7 @@
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 22px;
-    opacity: 0.75;
+    opacity: 0.72;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -331,54 +336,67 @@
   .insights-section { margin-bottom: 64px; }
 
   .insight-card {
-    /* FIX: background escuro explícito como base — sem depender de rgba(branco) */
-    background: rgba(16, 14, 10, 0.82);
-    /* FIX: backdrop-filter em elemento sem overflow:hidden no pai — agora funciona no WebKit */
-    -webkit-backdrop-filter: blur(20px) saturate(1.15);
-    backdrop-filter: blur(20px) saturate(1.15);
+    background: rgba(14, 12, 9, 0.85);
+    -webkit-backdrop-filter: blur(20px) saturate(1.1);
+    backdrop-filter: blur(20px) saturate(1.1);
     border: 1px solid var(--gold-line);
     border-radius: var(--r);
     padding: 36px 40px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     position: relative;
-    /* FIX: overflow:hidden removido do card também — substituído por border-radius no pseudo */
-    transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), background var(--dur-mid), box-shadow var(--dur-mid);
+    transition:
+      transform var(--dur-mid) var(--ease-soft),
+      border-color var(--dur-mid),
+      background var(--dur-mid),
+      box-shadow var(--dur-mid);
     cursor: default;
     transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + 0px), 0);
     will-change: transform;
-    /* FIX: isolate cria contexto de empilhamento sem quebrar backdrop-filter dos filhos */
     isolation: isolate;
   }
 
-  /* FIX: efeito de brilho superior refeito via pseudo sem overflow:hidden */
+  /* Top highlight line */
   .insight-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
     border-radius: var(--r) var(--r) 0 0;
-    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.8) 50%, transparent);
+    background: linear-gradient(90deg, transparent 10%, rgba(201,168,76,0.7) 50%, transparent 90%);
     opacity: 0;
     transition: opacity 0.45s;
     z-index: 2;
   }
-  /* FIX: shimmer interno refeito sem overflow:hidden */
+
+  /* Sweep shimmer on hover */
   .insight-card::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: var(--r);
     pointer-events: none;
-    background: linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 50%, rgba(201,168,76,0.02) 100%);
+    background: linear-gradient(
+      110deg,
+      transparent 20%,
+      rgba(201,168,76,0.055) 50%,
+      transparent 80%
+    );
+    background-size: 300% 100%;
+    background-position: -100% 0;
+    transition: background-position 0.9s var(--ease-soft);
     z-index: 0;
   }
 
   .insight-card:hover::before { opacity: 1; }
+  .insight-card:hover::after { background-position: 200% 0; }
   .insight-card:hover {
     transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + var(--lift-y)), 0) scale(1.003);
-    border-color: rgba(201,168,76,0.4);
-    background: rgba(22, 19, 13, 0.88);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.08) inset;
+    border-color: rgba(201,168,76,0.38);
+    background: rgba(20, 17, 12, 0.90);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.45),
+      0 0 0 1px rgba(201,168,76,0.06) inset,
+      0 8px 30px rgba(201,168,76,0.04);
   }
 
   .insight-corner {
@@ -391,12 +409,15 @@
     opacity: 0.04;
     line-height: 1;
     pointer-events: none;
-    transition: opacity 0.4s;
+    transition: opacity 0.4s, transform 0.5s var(--ease-soft);
     user-select: none;
     letter-spacing: -0.05em;
     z-index: 1;
   }
-  .insight-card:hover .insight-corner { opacity: 0.08; }
+  .insight-card:hover .insight-corner {
+    opacity: 0.09;
+    transform: translateY(-3px);
+  }
 
   .insight-tag {
     font-family: 'Space Mono', monospace;
@@ -422,7 +443,7 @@
   .insight-text {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-size: 14px;
-    line-height: 1.86;
+    line-height: 1.88;
     color: var(--text-mid);
     font-weight: 400;
     letter-spacing: 0.002em;
@@ -445,11 +466,11 @@
   .progress-bar-wrap {
     margin: 0 0 44px;
     padding: 22px 28px;
-    /* FIX: background escuro explícito */
-    background: rgba(16, 14, 10, 0.80);
+    background: rgba(14, 12, 9, 0.84);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.06);
+    border-top-color: rgba(255,255,255,0.08);
     border-radius: var(--r-sm);
     transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
     transition: border-color var(--dur-mid), box-shadow var(--dur-mid), transform var(--dur-mid) var(--ease-soft);
@@ -457,9 +478,9 @@
     isolation: isolate;
   }
   .progress-helper {
-    /* FIX: background escuro explícito */
-    background: rgba(14, 12, 9, 0.78);
-    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(12, 10, 7, 0.82);
+    border: 1px solid rgba(255,255,255,0.048);
+    border-top-color: rgba(255,255,255,0.065);
     border-radius: var(--r-sm);
     padding: 14px 16px;
     font-family: 'Space Mono', monospace;
@@ -477,8 +498,8 @@
     letter-spacing: 0.12em;
   }
   .progress-bar-wrap.is-complete {
-    border-color: rgba(201,168,76,0.3);
-    box-shadow: 0 0 30px rgba(201,168,76,0.06);
+    border-color: rgba(201,168,76,0.28);
+    box-shadow: 0 0 40px rgba(201,168,76,0.07), 0 0 0 1px rgba(201,168,76,0.05) inset;
   }
   .progress-label {
     display: flex;
@@ -504,20 +525,39 @@
   }
   .progress-track {
     height: 3px;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.055);
     border-radius: 999px;
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
     width: 100%;
-    background: linear-gradient(90deg, var(--gold-dim) 0%, var(--gold) 60%, #EDD17A 100%);
+    background: linear-gradient(90deg, var(--gold-dim) 0%, var(--gold) 60%, var(--gold-bright) 100%);
     border-radius: 999px;
     transform-origin: 0 50%;
     transform: scaleX(0);
-    box-shadow: 0 0 12px rgba(201,168,76,0.5);
     position: relative;
     will-change: transform;
+    transition: background 0.4s;
+  }
+
+  /* Shimmer on progress fill when active */
+  @keyframes progressShimmer {
+    0%   { background-position: -200% center; }
+    60%, 100% { background-position: 200% center; }
+  }
+  .progress-fill.has-progress {
+    background: linear-gradient(
+      90deg,
+      var(--gold-dim) 0%,
+      var(--gold) 35%,
+      var(--gold-bright) 50%,
+      var(--gold) 65%,
+      var(--gold-dim) 100%
+    );
+    background-size: 300% 100%;
+    animation: progressShimmer 4s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(201,168,76,0.45);
   }
   .progress-fill::after {
     content: '';
@@ -525,9 +565,9 @@
     right: 0; top: 50%;
     transform: translateY(-50%);
     width: 6px; height: 6px;
-    background: #EDD17A;
+    background: var(--gold-bright);
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(237,209,122,0.8);
+    box-shadow: 0 0 8px rgba(237,209,122,0.9), 0 0 20px rgba(237,209,122,0.4);
     opacity: 0;
     transition: opacity 0.3s 0.6s;
   }
@@ -549,10 +589,14 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 16px;
     background: var(--gold-glass);
-    /* FIX: backdrop-filter em elemento isolado, sem pai com overflow:hidden */
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     flex-shrink: 0;
+    transition: border-color var(--dur-mid), box-shadow var(--dur-mid);
+  }
+  .period-header:hover .period-icon {
+    border-color: rgba(201,168,76,0.35);
+    box-shadow: 0 0 16px rgba(201,168,76,0.12);
   }
   .period-title {
     font-family: 'Space Mono', monospace;
@@ -576,19 +620,21 @@
     align-items: flex-start;
     gap: 16px;
     padding: 18px 22px;
-    /* FIX: background escuro explícito */
-    background: rgba(14, 12, 9, 0.65);
-    border: 1px solid rgba(255,255,255,0.045);
+    background: rgba(12, 10, 7, 0.65);
+    border: 1px solid rgba(255,255,255,0.042);
     border-radius: var(--r-sm);
     cursor: pointer;
-    transition: background var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), transform var(--dur-fast) var(--ease-snap), box-shadow var(--dur-mid), opacity var(--dur-mid);
+    transition:
+      background var(--dur-mid) var(--ease-soft),
+      border-color var(--dur-mid),
+      transform var(--dur-fast) var(--ease-snap),
+      box-shadow var(--dur-mid),
+      opacity var(--dur-mid);
     position: relative;
-    /* FIX: overflow:hidden removido — barra lateral refeita com border-radius */
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     isolation: isolate;
   }
-  /* FIX: barra lateral esquerda refeita com clip-path em vez de overflow:hidden */
   .task-item::before {
     content: '';
     position: absolute;
@@ -601,29 +647,30 @@
     border-radius: 0 2px 2px 0;
   }
   .task-item:hover {
-    background: rgba(20, 18, 13, 0.78);
-    border-color: rgba(255,255,255,0.08);
-    transform: translate3d(2px, 0, 0);
+    background: rgba(18, 16, 11, 0.80);
+    border-color: rgba(255,255,255,0.07);
+    transform: translate3d(3px, 0, 0);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
   .task-item:hover::before { transform: scaleY(1); }
-  .task-item.is-pressed { transform: translate3d(2px, 0, 0) scale(0.992); }
+  .task-item.is-pressed { transform: translate3d(3px, 0, 0) scale(0.993); }
   .magnetic { transition: transform 220ms var(--ease-soft); }
 
   .task-item.checked {
-    background: rgba(201,168,76,0.06);
+    background: rgba(201,168,76,0.055);
     border-color: rgba(201,168,76,0.14);
   }
-  .task-item.checked::before { transform: scaleY(1); opacity: 0.5; }
+  .task-item.checked::before { transform: scaleY(1); opacity: 0.45; }
 
   /* ── CHECKBOX ── */
   .task-check {
     width: 22px; height: 22px;
     border-radius: 50%;
-    border: 1.5px solid rgba(201,168,76,0.35);
+    border: 1.5px solid rgba(201,168,76,0.32);
     flex-shrink: 0;
     margin-top: 1px;
     position: relative;
-    transition: border-color 0.4s var(--ease), background 0.4s var(--ease), box-shadow 0.4s;
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease), box-shadow 0.4s, transform 0.25s var(--ease-back);
     background: transparent;
     will-change: transform;
   }
@@ -639,7 +686,7 @@
   .task-item.checked .task-check {
     border-color: var(--gold);
     background: rgba(201,168,76,0.1);
-    box-shadow: 0 0 0 4px rgba(201,168,76,0.08), 0 0 16px rgba(201,168,76,0.18);
+    box-shadow: 0 0 0 4px rgba(201,168,76,0.08), 0 0 18px rgba(201,168,76,0.2);
   }
   .task-item.checked .task-check::after { transform: scale(1); }
 
@@ -657,8 +704,8 @@
     animation: rippleOut 0.55s var(--ease) forwards;
   }
   @keyframes rippleOut {
-    0% { opacity: 0.7; transform: scale(0.5); }
-    100% { opacity: 0; transform: scale(1.6); }
+    0% { opacity: 0.65; transform: scale(0.5); }
+    100% { opacity: 0; transform: scale(1.7); }
   }
 
   .task-body { flex: 1; min-width: 0; }
@@ -669,7 +716,7 @@
     color: var(--gold);
     letter-spacing: 0.1em;
     margin-bottom: 6px;
-    opacity: 0.7;
+    opacity: 0.65;
   }
   .task-title {
     font-size: 13.5px;
@@ -682,7 +729,7 @@
   .task-item.checked .task-title {
     color: var(--text-dim);
     text-decoration: line-through;
-    text-decoration-color: rgba(201,168,76,0.3);
+    text-decoration-color: rgba(201,168,76,0.28);
     text-decoration-thickness: 1px;
   }
 
@@ -704,7 +751,7 @@
     position: absolute;
     left: 2px;
     color: var(--gold-dim);
-    opacity: 0.7;
+    opacity: 0.65;
   }
 
   .task-badge {
@@ -714,7 +761,7 @@
     text-transform: uppercase;
     padding: 3px 9px;
     border-radius: 999px;
-    border: 1px solid rgba(201,168,76,0.18);
+    border: 1px solid rgba(201,168,76,0.16);
     color: var(--gold-dim);
     white-space: nowrap;
     margin-top: 2px;
@@ -730,16 +777,16 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(122,28,28,0.10);
+    background: rgba(122,28,28,0.09);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(122,28,28,0.22);
+    border: 1px solid rgba(122,28,28,0.2);
     border-radius: var(--r-sm);
     padding: 12px 18px;
     margin-top: 6px;
     font-family: 'Space Mono', monospace;
     font-size: 10px;
-    color: rgba(237,229,211,0.42);
+    color: rgba(237,229,211,0.40);
     letter-spacing: 0.08em;
     transition: border-color 0.3s;
   }
@@ -748,57 +795,74 @@
     color: var(--red);
     font-size: 12px;
     flex-shrink: 0;
-    opacity: 0.8;
+    opacity: 0.75;
   }
 
   /* ── FOOTER PHILOSOPHY ── */
   .footer-philosophy {
     margin-top: 10px;
-    padding: 52px 48px;
-    /* FIX: background escuro explícito */
-    background: rgba(16, 14, 10, 0.84);
-    -webkit-backdrop-filter: blur(28px) saturate(1.15);
-    backdrop-filter: blur(28px) saturate(1.15);
+    padding: 52px 48px 48px;
+    background: rgba(14, 12, 9, 0.88);
+    -webkit-backdrop-filter: blur(28px) saturate(1.1);
+    backdrop-filter: blur(28px) saturate(1.1);
     border: 1px solid var(--gold-line);
+    border-top-color: rgba(201,168,76,0.28);
     border-radius: var(--r);
     text-align: center;
     position: relative;
-    /* FIX: overflow:hidden removido — pseudo-elementos refeitos com border-radius */
     transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
     transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), box-shadow var(--dur-mid);
     isolation: isolate;
+    overflow: hidden;
   }
+  /* Top gold line */
   .footer-philosophy::before {
     content: '';
     position: absolute;
-    top: 0; left: 20%; right: 20%;
+    top: 0; left: 15%; right: 15%;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
-    opacity: 0.7;
-    border-radius: var(--r) var(--r) 0 0;
+    opacity: 0.55;
   }
+  /* Concentric rings decoration - replaces REGIME text */
   .footer-philosophy::after {
-    content: 'REGIME';
+    content: '';
     position: absolute;
-    bottom: -20px; left: 50%;
-    transform: translate3d(-50%, 0, 0);
-    font-family: 'Big Shoulders Display', sans-serif;
-    font-weight: 900;
-    font-size: 120px;
-    color: var(--gold);
-    opacity: 0.018;
-    letter-spacing: -0.03em;
+    bottom: -55px; left: 50%;
+    transform: translateX(-50%);
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.07);
+    box-shadow:
+      0 0 0 26px rgba(201,168,76,0.03),
+      0 0 0 58px rgba(201,168,76,0.015),
+      0 0 0 98px rgba(201,168,76,0.007);
     pointer-events: none;
-    user-select: none;
-    white-space: nowrap;
     z-index: 0;
+  }
+
+  /* Geometric glyph before the quote */
+  .fp-glyph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+  .fp-glyph svg {
+    opacity: 0.55;
+    transition: opacity 0.4s;
+  }
+  .footer-philosophy:hover .fp-glyph svg {
+    opacity: 0.8;
   }
 
   .fp-quote {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: clamp(17px, 2.6vw, 23px);
-    line-height: 1.75;
+    line-height: 1.78;
     color: var(--text-mid);
     margin-bottom: 28px;
     max-width: 600px;
@@ -814,6 +878,32 @@
     font-weight: 600;
   }
 
+  .fp-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .fp-divider::before,
+  .fp-divider::after {
+    content: '';
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-line));
+  }
+  .fp-divider::after {
+    background: linear-gradient(90deg, var(--gold-line), transparent);
+  }
+  .fp-divider-dot {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.5;
+    box-shadow: 0 0 6px var(--gold);
+  }
+
   .fp-author {
     font-family: 'Space Mono', monospace;
     font-size: 10px;
@@ -824,20 +914,28 @@
     z-index: 1;
   }
 
-  /* ── SCROLL REVEAL ── */
+  /* ── SCROLL REVEAL (simplified, direction-aware) ── */
   .sr {
     opacity: 0;
-    transform: translate3d(0, var(--sr-y, 22px), 0) scale(var(--sr-scale, 0.99));
-    transition: opacity var(--dur-slow) var(--ease-soft), transform var(--dur-slow) var(--ease-soft);
+    transform: translate3d(0, 20px, 0) scale(0.99);
+    transition:
+      opacity var(--dur-slow) var(--ease-soft),
+      transform var(--dur-slow) var(--ease-soft);
+  }
+  /* When scrolling up, elements enter from above */
+  .sr.sr-up {
+    transform: translate3d(0, -13px, 0) scale(0.99);
   }
   .sr.visible {
-    opacity: var(--sync-o, 1);
-    transform: translate3d(var(--mx, 0px), calc(var(--sync-y, 0px) + var(--my, 0px)), 0) scale(var(--sync-scale, 1));
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
   }
-  .sr.sync-node.visible { transition: none; }
-  .sr-delay-1 { transition-delay: 0.08s; }
-  .sr-delay-2 { transition-delay: 0.16s; }
-  .sr-delay-3 { transition-delay: 0.24s; }
+  .sr-delay-1 { transition-delay: 0.07s; }
+  .sr-delay-2 { transition-delay: 0.14s; }
+  .sr-delay-3 { transition-delay: 0.21s; }
+
+  /* ── MOTION SYNC — simplified, no longer drives transforms ── */
+  .motion-sync { /* intentionally neutral */ }
 
   /* ── UTILITY ANIMATIONS ── */
   @keyframes slideIn {
@@ -845,17 +943,26 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── PAGE LOAD FADE ── */
+  @keyframes pageFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .wrapper {
+    animation: pageFadeIn 0.6s ease forwards;
+  }
+
   /* ── MOBILE ── */
   @media (max-width: 620px) {
     .wrapper { padding: 0 18px 80px; }
     header { padding: 52px 0 36px; }
-    .section-shell { padding: 20px 16px; border-radius: 16px; margin-bottom: 14px; }
-    .section-shell::before { border-radius: 16px; }
+    .section-shell { padding: 20px 16px; border-radius: 14px; margin-bottom: 12px; }
+    .section-shell::before { border-radius: 14px; }
     .overview-grid { grid-template-columns: 1fr; gap: 12px; }
     .progress-stack { position: static; top: auto; }
     .routine-grid { grid-template-columns: 1fr; gap: 10px; }
     .insight-card { padding: 24px 20px; }
-    .footer-philosophy { padding: 36px 26px; }
+    .footer-philosophy { padding: 36px 26px 42px; }
     .task-item { padding: 15px 16px; }
     .progress-bar-wrap { padding: 18px 20px; }
     .period-header { margin-bottom: 12px; }
@@ -864,15 +971,17 @@
     .amb-1 { width: 420px; height: 420px; filter: blur(44px); top: -180px; right: -130px; }
     .amb-2 { width: 300px; height: 300px; filter: blur(44px); bottom: 3%; left: -110px; }
     .amb-3 { width: 200px; height: 200px; filter: blur(38px); left: 48%; }
-    /* FIX mobile: blur reduzido para performance, mas mantendo efeito visual */
+    /* Reduced blur for mobile performance */
     .insight-card,
     .progress-bar-wrap,
     .progress-helper,
     .footer-philosophy {
-      -webkit-backdrop-filter: blur(12px) saturate(1.04);
-      backdrop-filter: blur(12px) saturate(1.04);
+      -webkit-backdrop-filter: blur(10px) saturate(1.04);
+      backdrop-filter: blur(10px) saturate(1.04);
     }
-    body::before { opacity: 0.28; }
+    body::before { opacity: 0.25; }
+    /* Reduce dot grid on mobile for performance */
+    body::after { opacity: 0.5; background-size: 32px 32px; }
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -883,7 +992,7 @@
   @media (hover: none), (pointer: coarse) {
     .insight-card:hover,
     .task-item:hover { transform: none; }
-    .insight-card::before { opacity: 0.5; }
+    .insight-card::before { opacity: 0.45; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -895,6 +1004,7 @@
     }
     .ambient, .line-deco { display: none; }
     .idle-drift { animation: none !important; }
+    .sr { opacity: 1 !important; transform: none !important; }
   }
 
   /* ── SCROLLBAR ── */
@@ -904,7 +1014,7 @@
 
   /* ── SELECTION ── */
   ::selection {
-    background: rgba(201,168,76,0.2);
+    background: rgba(201,168,76,0.18);
     color: var(--text);
   }
 </style>
@@ -922,7 +1032,7 @@
 <div class="wrapper">
 
   <!-- HEADER -->
-  <header class="motion-sync" data-sync="fg" data-depth="1.08">
+  <header>
     <div class="watermark">
       uso não autorizado proibido ·
       <a href="https://instagram.com/rvrenr" target="_blank" rel="noopener">@rvrenr</a>
@@ -937,7 +1047,7 @@
 
   <section class="overview-grid">
     <!-- INSIGHTS -->
-    <div class="insights-section motion-sync section-shell idle-drift" data-sync="bg" data-depth="0.92" style="--idle-delay: .2s;">
+    <div class="insights-section section-shell idle-drift" style="--idle-delay: .2s;">
       <div class="section-label sr">// pensamento estratégico</div>
 
     <div class="insight-card sr sr-delay-1 magnetic">
@@ -990,7 +1100,7 @@
     </div>
     </div>
 
-    <aside class="progress-stack sr sync-node" data-sync="fg" data-depth="0.96">
+    <aside class="progress-stack sr">
       <!-- PROGRESS -->
       <div class="progress-bar-wrap section-shell magnetic idle-drift" style="--idle-delay: .9s;">
         <div class="progress-label">
@@ -1010,15 +1120,15 @@
     </aside>
   </section>
 
-  <div class="divider sr sync-node" data-sync="stable" data-depth="0.75"></div>
+  <div class="divider sr"></div>
 
   <!-- ROUTINE -->
-  <section class="section-shell motion-sync idle-drift" data-sync="stable" data-depth="0.82" style="margin-top: 8px; --idle-delay: 1.4s;">
-    <div class="section-label sr sync-node" data-sync="stable" data-depth="0.7">// rotina diária</div>
+  <section class="section-shell idle-drift" style="margin-top: 8px; --idle-delay: 1.4s;">
+    <div class="section-label sr">// rotina diária</div>
     <div class="routine-grid">
 
     <!-- MANHÃ -->
-    <div class="period-block is-primary sr sync-node" data-sync="fg" data-depth="1.04">
+    <div class="period-block is-primary sr">
       <div class="period-header">
         <div class="period-icon">🌅</div>
         <div class="period-title">Manhã</div>
@@ -1099,7 +1209,7 @@
     </div>
 
     <!-- TARDE -->
-    <div class="period-block sr sr-delay-1 sync-node" data-sync="bg" data-depth="0.9">
+    <div class="period-block sr sr-delay-1">
       <div class="period-header">
         <div class="period-icon">☀️</div>
         <div class="period-title">Tarde</div>
@@ -1159,7 +1269,7 @@
     </div>
 
     <!-- NOITE -->
-    <div class="period-block sr sr-delay-2 sync-node" data-sync="fg" data-depth="0.98">
+    <div class="period-block sr sr-delay-2">
       <div class="period-header">
         <div class="period-icon">🌙</div>
         <div class="period-title">Noite</div>
@@ -1213,21 +1323,46 @@
     </div>
   </section>
 
-  <div class="divider sr sync-node" data-sync="stable" data-depth="0.72"></div>
+  <div class="divider sr"></div>
 
   <!-- FOOTER PHILOSOPHY -->
-  <div class="footer-philosophy sr sync-node magnetic idle-drift" data-sync="bg" data-depth="0.86" style="--idle-delay: 2s;">
+  <div class="footer-philosophy sr magnetic idle-drift" style="--idle-delay: 2s;">
+
+    <!-- Geometric mark replacing REGIME text -->
+    <div class="fp-glyph" aria-hidden="true">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16.5" stroke="rgba(201,168,76,0.4)" stroke-width="0.75"/>
+        <circle cx="18" cy="18" r="9" stroke="rgba(201,168,76,0.28)" stroke-width="0.75"/>
+        <circle cx="18" cy="18" r="2.5" fill="rgba(201,168,76,0.7)"/>
+        <line x1="18" y1="1" x2="18" y2="35" stroke="rgba(201,168,76,0.18)" stroke-width="0.75"/>
+        <line x1="1" y1="18" x2="35" y2="18" stroke="rgba(201,168,76,0.18)" stroke-width="0.75"/>
+        <line x1="5.4" y1="5.4" x2="30.6" y2="30.6" stroke="rgba(201,168,76,0.08)" stroke-width="0.75"/>
+        <line x1="30.6" y1="5.4" x2="5.4" y2="30.6" stroke="rgba(201,168,76,0.08)" stroke-width="0.75"/>
+      </svg>
+    </div>
+
     <p class="fp-quote">
       "O homem que conhece as regras e escolhe quando quebrá-las
       não é nem bom nem mau —
       é <em>livre</em>."
     </p>
+
+    <div class="fp-divider">
+      <div class="fp-divider-dot"></div>
+    </div>
+
     <div class="fp-author">— @rvrenr / regime</div>
   </div>
 
 </div><!-- /wrapper -->
 
 <script>
+  /* ─────────────────────────────────────────────
+     REGIME — @rvrenr
+     Improved: simplified scroll, direction-aware
+     reveals, 60fps iOS/Android safe
+  ───────────────────────────────────────────── */
+
   const STORAGE_KEY = 'rvrenr_regime_v2';
   const today = new Date().toISOString().split('T')[0];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1238,6 +1373,7 @@
   let shownProgress = 0;
   let progressRaf = null;
 
+  /* ── TITLE REVEAL ── */
   (function initTitle() {
     const title = document.getElementById('mainTitle');
     if (!title) return;
@@ -1246,35 +1382,31 @@
     const goldGroup = document.createElement('span');
     goldGroup.className = 'gold-word';
     goldGroup.style.display = 'inline';
-
     word.split('').forEach((ch, i) => {
       const span = document.createElement('span');
       span.className = 'char';
       span.textContent = ch;
       span.style.animationDelay = (0.06 + i * 0.075) + 's';
-      if (i < 3) goldGroup.appendChild(span);
-      else {
+      if (i < 3) {
+        goldGroup.appendChild(span);
+      } else {
         if (i === 3) title.appendChild(goldGroup);
         title.appendChild(span);
       }
     });
   })();
 
+  /* ── STATE PERSISTENCE ── */
   function loadState() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    } catch {
-      return {};
-    }
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
   }
-
   function saveState(state) {
-    try {
-      state._date = today;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {}
+    try { state._date = today; localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch {}
   }
 
+  /* ── PROGRESS BAR ── */
   function renderProgress(pct) {
     const fill = document.getElementById('progressFill');
     const label = document.getElementById('pctLabel');
@@ -1291,9 +1423,7 @@
     if (progressRaf) return;
     const tick = () => {
       shownProgress += (targetProgress - shownProgress) * 0.16;
-      if (Math.abs(targetProgress - shownProgress) < 0.08) {
-        shownProgress = targetProgress;
-      }
+      if (Math.abs(targetProgress - shownProgress) < 0.08) shownProgress = targetProgress;
       renderProgress(shownProgress);
       if (shownProgress !== targetProgress) {
         progressRaf = requestAnimationFrame(tick);
@@ -1307,10 +1437,10 @@
   function updateProgress() {
     const items = document.querySelectorAll('.task-item');
     const checked = document.querySelectorAll('.task-item.checked').length;
-    const pct = Math.round((checked / items.length) * 100);
-    animateProgressTo(pct);
+    animateProgressTo(Math.round((checked / items.length) * 100));
   }
 
+  /* ── TOGGLE TASK ── */
   function toggleTask(el) {
     const wasChecked = el.classList.contains('checked');
     el.classList.toggle('checked');
@@ -1318,9 +1448,8 @@
       el.classList.add('just-checked');
       setTimeout(() => el.classList.remove('just-checked'), 600);
     }
-    const id = el.dataset.id;
     const state = loadState();
-    state[id] = el.classList.contains('checked');
+    state[el.dataset.id] = el.classList.contains('checked');
     saveState(state);
     updateProgress();
   }
@@ -1333,25 +1462,85 @@
     updateProgress();
   }
 
+  /* ── SCROLL REVEAL — direction-aware, iOS-safe ── */
   function initScrollReveal() {
     const els = document.querySelectorAll('.sr');
-    els.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(280, i * 28)}ms`;
-    });
+    let scrollDir = 'down';
+    let lastY = window.pageYOffset;
+
+    // Track scroll direction with a small deadzone
+    window.addEventListener('scroll', () => {
+      const y = window.pageYOffset;
+      if (Math.abs(y - lastY) > 4) {
+        scrollDir = y > lastY ? 'down' : 'up';
+        lastY = y;
+      }
+    }, { passive: true });
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          const el = entry.target;
+          // Add direction class before making visible
+          if (scrollDir === 'up') el.classList.add('sr-up');
+          // Defer one frame so CSS picks up the direction class
+          requestAnimationFrame(() => {
+            el.classList.add('visible');
+          });
+          observer.unobserve(el);
         }
       });
-    }, { threshold: 0.09, rootMargin: '0px 0px -10% 0px' });
-    els.forEach(el => observer.observe(el));
+    }, { threshold: 0.07, rootMargin: '0px 0px -4% 0px' });
+
+    els.forEach((el, i) => {
+      el.style.transitionDelay = `${Math.min(220, i * 26)}ms`;
+      observer.observe(el);
+    });
   }
 
+  /* ── SCROLL SYSTEM — simple, performant, 60fps ── */
+  function initScrollSystem() {
+    const progress = document.getElementById('scrollProgress');
+    const ambients = Array.from(document.querySelectorAll('.ambient'));
+    const FACTORS = [0.016, 0.011, 0.020];
+
+    let lastScrollY = -1;
+    let rafPending = false;
+
+    const update = () => {
+      rafPending = false;
+      const y = window.pageYOffset;
+      if (y === lastScrollY) return;
+      lastScrollY = y;
+
+      // Scroll progress bar — direct, no lerp needed
+      if (progress) {
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        progress.style.transform = `scaleX(${Math.min(1, y / max)})`;
+      }
+
+      // Subtle ambient orb parallax — GPU-only transform
+      if (!reduceMotion) {
+        ambients.forEach((el, i) => {
+          el.style.transform = `translate3d(0, ${(y * FACTORS[i]).toFixed(2)}px, 0)`;
+        });
+      }
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+
+    // Initial render
+    update();
+  }
+
+  /* ── PRESS FEEDBACK ── */
   function initTaskPressFeedback() {
-    const items = document.querySelectorAll('.task-item');
-    items.forEach(item => {
+    document.querySelectorAll('.task-item').forEach(item => {
       item.addEventListener('pointerdown', () => item.classList.add('is-pressed'), { passive: true });
       const clear = () => item.classList.remove('is-pressed');
       item.addEventListener('pointerup', clear, { passive: true });
@@ -1360,18 +1549,18 @@
     });
   }
 
+  /* ── DEPTH TILT (desktop only) ── */
   function initDepthTilt() {
     if (!finePointer || reduceMotion) return;
-    const cards = document.querySelectorAll('.insight-card');
-    cards.forEach(card => {
-      const maxTilt = 3.2;
+    document.querySelectorAll('.insight-card').forEach(card => {
+      const MAX = 3.0;
       card.addEventListener('pointermove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const px = (e.clientX - rect.left) / rect.width - 0.5;
-        const py = (e.clientY - rect.top) / rect.height - 0.5;
-        const rx = -(py * maxTilt);
-        const ry = px * maxTilt;
-        card.style.setProperty('--tilt-transform', `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`);
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty('--tilt-transform',
+          `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg)`
+        );
       }, { passive: true });
       card.addEventListener('pointerleave', () => {
         card.style.removeProperty('--tilt-transform');
@@ -1379,11 +1568,11 @@
     });
   }
 
+  /* ── MAGNETIC HOVER (desktop only) ── */
   function initMagneticHover() {
     if (!finePointer || reduceMotion) return;
-    const magnets = document.querySelectorAll('.magnetic');
-    magnets.forEach(el => {
-      const strength = el.classList.contains('insight-card') ? 4.2 : 3.2;
+    document.querySelectorAll('.magnetic').forEach(el => {
+      const strength = el.classList.contains('insight-card') ? 4.0 : 3.0;
       el.addEventListener('pointermove', (e) => {
         const r = el.getBoundingClientRect();
         const x = ((e.clientX - r.left) / r.width - 0.5) * strength;
@@ -1398,123 +1587,14 @@
     });
   }
 
-  function initScrollMotionSystem() {
-    const progress = document.getElementById('scrollProgress');
-    const ambients = Array.from(document.querySelectorAll('.ambient'));
-    const syncNodes = Array.from(document.querySelectorAll('[data-sync]')).map(el => ({
-      el,
-      role: el.dataset.sync || 'stable',
-      depth: Math.max(0.45, Math.min(1.35, parseFloat(el.dataset.depth || '1')))
-    }));
-    if (!progress) return;
-
-    let targetY = window.scrollY || window.pageYOffset;
-    let smoothY = targetY;
-    let prevY = smoothY;
-    let rafId = null;
-    let settleFrames = 0;
-    let viewportH = window.innerHeight || 1;
-
-    const recalc = () => {
-      viewportH = window.innerHeight || 1;
-      syncNodes.forEach(node => {
-        const rect = node.el.getBoundingClientRect();
-        node.top = rect.top + (window.scrollY || window.pageYOffset);
-        node.height = rect.height;
-      });
-    };
-
-    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-
-    const start = () => {
-      if (rafId) return;
-      syncNodes.forEach(node => { node.el.style.willChange = 'transform, opacity'; });
-      ambients.forEach(el => { el.style.willChange = 'transform, opacity'; });
-      rafId = requestAnimationFrame(tick);
-    };
-
-    const applySyncMotion = (velocity) => {
-      const direction = velocity >= 0 ? 1 : -1;
-      const mobileFactor = coarsePointer ? 0.68 : 1;
-      const centerViewport = smoothY + viewportH * 0.5;
-
-      syncNodes.forEach(node => {
-        const centerNode = node.top + node.height * 0.5;
-        const normalized = clamp((centerNode - centerViewport) / (viewportH * 0.5), -1.2, 1.2);
-        const proximity = 1 - Math.min(1, Math.abs(normalized));
-        let y = 0;
-
-        if (node.role === 'fg') {
-          y = (-normalized * node.depth * 8.2) + (direction > 0 ? velocity * 0.56 : velocity * 0.34);
-        } else if (node.role === 'bg') {
-          y = (normalized * node.depth * 6.6) + (direction > 0 ? velocity * 0.28 : velocity * 0.46);
-        } else {
-          y = velocity * 0.18;
-        }
-
-        const scale = 1 + (proximity * 0.0065 * node.depth * (node.role === 'fg' ? 1 : 0.72));
-        const opacity = 0.955 + (proximity * 0.045);
-
-        node.el.style.setProperty('--sync-y', `${(y * mobileFactor).toFixed(3)}px`);
-        node.el.style.setProperty('--sync-scale', scale.toFixed(4));
-        node.el.style.setProperty('--sync-o', opacity.toFixed(4));
-      });
-    };
-
-    const tick = () => {
-      smoothY += (targetY - smoothY) * 0.14;
-      const velocity = smoothY - prevY;
-      prevY = smoothY;
-
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportH);
-      const scrollPct = clamp(smoothY / maxScroll, 0, 1);
-      progress.style.transform = `scaleX(${scrollPct.toFixed(4)})`;
-
-      if (!reduceMotion) {
-        ambients.forEach((el, idx) => {
-          const factor = (idx + 1) * 0.014;
-          el.style.transform = `translate3d(0, ${(smoothY * factor).toFixed(3)}px, 0)`;
-        });
-        applySyncMotion(velocity);
-      }
-
-      const settled = Math.abs(targetY - smoothY) < 0.08 && Math.abs(velocity) < 0.04;
-      settleFrames = settled ? settleFrames + 1 : 0;
-      if (settleFrames < 8) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        syncNodes.forEach(node => { node.el.style.willChange = ''; });
-        ambients.forEach(el => { el.style.willChange = ''; });
-        rafId = null;
-      }
-    };
-
-    const onScroll = () => {
-      targetY = window.scrollY || window.pageYOffset;
-      start();
-    };
-
-    const onResize = () => {
-      recalc();
-      targetY = window.scrollY || window.pageYOffset;
-      smoothY = targetY;
-      prevY = smoothY;
-      start();
-    };
-
-    recalc();
-    start();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize, { passive: true });
-  }
-
+  /* ── INIT ── */
   document.addEventListener('DOMContentLoaded', () => {
     restoreState();
     initScrollReveal();
+    initScrollSystem();
     initTaskPressFeedback();
     initDepthTilt();
     initMagneticHover();
-    initScrollMotionSystem();
   });
 </script>
 </body>
