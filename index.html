@@ -16,9 +16,10 @@
     --gold-glow: rgba(198,162,74,0.13);
     --gold-line: rgba(198,162,74,0.2);
     --gold-glass: rgba(198,162,74,0.055);
-    --bg: #060606;
-    --bg2: #0d0d0d;
-    --bg3: #131313;
+    /* True-black hierarchy (OpenAI-like) */
+    --bg: #000000;
+    --bg2: #050505;
+    --bg3: #0A0A0A;
     --glass: rgba(255,255,255,0.025);
     --glass2: rgba(255,255,255,0.05);
     --glass3: rgba(255,255,255,0.075);
@@ -51,6 +52,40 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent; /* prevent iOS white flash */
+  }
+
+  /* Prevent any default "white flash" UI states */
+  :where(a, button, input, textarea, select, summary, [role="button"], .task-item) {
+    -webkit-tap-highlight-color: transparent;
+  }
+  :where(button, input, textarea, select) {
+    background: #000;
+    color: var(--text);
+    border-color: rgba(255,255,255,0.12);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-clip: padding-box;
+  }
+  :where(button, input, textarea, select):focus,
+  :where(button, input, textarea, select):active {
+    background: #000;
+    color: var(--text);
+  }
+  :where(button, input, textarea, select):focus-visible {
+    outline: 2px solid rgba(198,162,74,0.35);
+    outline-offset: 2px;
+  }
+  /* iOS/Safari autofill: keep dark (no yellow/white flash) */
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--text) !important;
+    caret-color: var(--text) !important;
+    box-shadow: 0 0 0px 1000px #000 inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    transition: background-color 999999s ease-out, color 999999s ease-out;
   }
 
   .scroll-progress {
@@ -73,10 +108,10 @@
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(48% 42% at 15% 8%, rgba(201,168,76,0.08), transparent 74%),
-      radial-gradient(40% 36% at 84% 14%, rgba(122,28,28,0.09), transparent 76%),
-      radial-gradient(34% 32% at 58% 76%, rgba(201,168,76,0.05), transparent 80%);
-    opacity: 0.9;
+      radial-gradient(48% 42% at 15% 8%, rgba(198,162,74,0.085), transparent 74%),
+      radial-gradient(40% 36% at 84% 14%, rgba(122,28,28,0.095), transparent 76%),
+      radial-gradient(34% 32% at 58% 76%, rgba(198,162,74,0.055), transparent 80%);
+    opacity: 0.86;
     transform: translate3d(0, 0, 0);
     animation: haloBreath 18s var(--ease-soft) infinite;
     will-change: opacity;
@@ -94,7 +129,7 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9998;
-    opacity: 0.55;
+    opacity: 0.45;
   }
 
   /* ── DIAGONAL GRID ── */
@@ -106,8 +141,8 @@
       -55deg,
       transparent,
       transparent 48px,
-      rgba(201,168,76,0.018) 48px,
-      rgba(201,168,76,0.018) 49px
+      rgba(198,162,74,0.014) 48px,
+      rgba(198,162,74,0.014) 49px
     );
     pointer-events: none;
     z-index: 0;
@@ -353,7 +388,7 @@
   .insights-section { margin-bottom: 64px; }
 
   .insight-card {
-    background: var(--glass);
+    background: color-mix(in srgb, #000 86%, var(--glass) 14%);
     backdrop-filter: blur(14px) saturate(1.05);
     -webkit-backdrop-filter: blur(14px) saturate(1.05);
     border: 1px solid var(--gold-line);
@@ -447,7 +482,7 @@
   .progress-bar-wrap {
     margin: 0 0 44px;
     padding: 22px 28px;
-    background: var(--glass);
+    background: color-mix(in srgb, #000 88%, var(--glass) 12%);
     backdrop-filter: blur(12px) saturate(1.04);
     -webkit-backdrop-filter: blur(12px) saturate(1.04);
     border: 1px solid rgba(255,255,255,0.06);
@@ -578,7 +613,7 @@
     align-items: flex-start;
     gap: 16px;
     padding: 18px 22px;
-    background: var(--glass);
+    background: color-mix(in srgb, #000 90%, var(--glass) 10%);
     border: 1px solid rgba(255,255,255,0.045);
     border-radius: var(--r-sm);
     cursor: pointer;
@@ -756,7 +791,7 @@
   .footer-philosophy {
     margin-top: 10px;
     padding: 52px 48px;
-    background: var(--glass);
+    background: color-mix(in srgb, #000 86%, var(--glass) 14%);
     backdrop-filter: blur(16px) saturate(1.06);
     -webkit-backdrop-filter: blur(16px) saturate(1.06);
     border: 1px solid var(--gold-line);
@@ -926,8 +961,9 @@
     .insight-card,
     .progress-bar-wrap,
     .footer-philosophy {
-      -webkit-backdrop-filter: blur(10px) saturate(1.02);
-      backdrop-filter: blur(10px) saturate(1.02);
+      /* iOS: lower blur + force stable compositing (prevents white flash) */
+      -webkit-backdrop-filter: blur(8px) saturate(1.01);
+      backdrop-filter: blur(8px) saturate(1.01);
       /* Workaround para artefatos "white bubble/box" em camadas com blur + transform */
       -webkit-mask-image: -webkit-radial-gradient(white, black);
       mask-image: radial-gradient(white, black);
@@ -938,7 +974,7 @@
     .blocker-notice {
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.025);
     }
     .magnetic { transition: none !important; }
     .insight-card { --tilt-transform: none !important; }
@@ -950,7 +986,7 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-line); border-radius: 2px; }
 
   /* ── SELECTION ── */
-  ::selection { background: rgba(198,162,74,0.18); color: var(--text); }
+  ::selection { background: rgba(198,162,74,0.16); color: var(--text); }
 </style>
 </head>
 <body>
