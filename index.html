@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="color-scheme" content="dark"/>
 <title>REGIME — @rvrenr</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Big+Shoulders+Display:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,700&display=swap" rel="stylesheet"/>
 
 <style>
   :root {
@@ -44,7 +45,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -64,7 +65,25 @@
     box-shadow: 0 0 16px rgba(201,168,76,0.38);
     z-index: 10000;
     pointer-events: none;
-    will-change: transform;
+  }
+
+  .bg-halo {
+    position: fixed;
+    inset: -12% -10% 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(48% 42% at 15% 8%, rgba(201,168,76,0.08), transparent 74%),
+      radial-gradient(40% 36% at 84% 14%, rgba(122,28,28,0.09), transparent 76%),
+      radial-gradient(34% 32% at 58% 76%, rgba(201,168,76,0.05), transparent 80%);
+    opacity: 0.85;
+    transform: translate3d(0, 0, 0);
+    animation: haloBreath 18s var(--ease-soft) infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes haloBreath {
+    0%, 100% { opacity: 0.78; }
+    50% { opacity: 0.9; }
   }
 
   /* ── GRAIN OVERLAY ── */
@@ -100,33 +119,48 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
+    opacity: 0.58;
     will-change: transform, opacity;
   }
   .amb-1 {
     width: 700px; height: 700px;
     background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, transparent 68%);
     top: -280px; right: -160px;
-    filter: blur(80px);
-    animation: breathe 10s ease-in-out infinite;
+    filter: blur(62px);
+    animation: orbOneMove 22s var(--ease-soft) infinite, orbFade 13s ease-in-out infinite;
   }
   .amb-2 {
     width: 500px; height: 500px;
     background: radial-gradient(circle, rgba(122,28,28,0.08) 0%, transparent 70%);
     bottom: 5%; left: -140px;
-    filter: blur(90px);
-    animation: breathe 12s ease-in-out infinite 5s;
+    filter: blur(68px);
+    animation: orbTwoMove 26s var(--ease-soft) infinite, orbFade 15s ease-in-out infinite 1.2s;
   }
   .amb-3 {
     width: 300px; height: 300px;
     background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
     top: 40%; left: 55%;
-    filter: blur(70px);
-    animation: breathe 14s ease-in-out infinite 2s;
+    filter: blur(56px);
+    animation: orbThreeMove 30s var(--ease-soft) infinite, orbFade 17s ease-in-out infinite 1.8s;
   }
-  @keyframes breathe {
-    0%, 100% { opacity: 0.6; transform: scale(1) translate(0, 0); }
-    33% { opacity: 0.9; transform: scale(1.06) translate(10px, -10px); }
-    66% { opacity: 0.7; transform: scale(0.97) translate(-8px, 5px); }
+  @keyframes orbOneMove {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    35% { transform: translate3d(18px, -12px, 0) scale(1.03); }
+    70% { transform: translate3d(-14px, 8px, 0) scale(0.99); }
+  }
+  @keyframes orbTwoMove {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    45% { transform: translate3d(-16px, 12px, 0) scale(1.02); }
+    75% { transform: translate3d(10px, -9px, 0) scale(0.985); }
+  }
+  @keyframes orbThreeMove {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    40% { transform: translate3d(12px, -10px, 0) scale(1.025); }
+    78% { transform: translate3d(-10px, 8px, 0) scale(0.99); }
+  }
+  @keyframes orbFade {
+    0%, 100% { opacity: 0.48; }
+    50% { opacity: 0.64; }
   }
 
   /* ── FLOATING LINES (decorative) ── */
@@ -135,7 +169,7 @@
     pointer-events: none;
     z-index: 0;
     opacity: 0;
-    animation: lineFade 3s var(--ease) forwards;
+    display: none;
   }
   .line-deco:nth-child(1) { width: 1px; height: 180px; background: linear-gradient(to bottom, transparent, var(--gold-line), transparent); top: 15%; right: 8%; animation-delay: 1.2s; }
   .line-deco:nth-child(2) { width: 120px; height: 1px; background: linear-gradient(to right, transparent, var(--gold-line), transparent); bottom: 30%; left: 5%; animation-delay: 1.8s; }
@@ -145,7 +179,7 @@
   .wrapper {
     position: relative;
     z-index: 1;
-    max-width: 860px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 0 28px 140px;
   }
@@ -153,8 +187,53 @@
   .motion-sync {
     transform: translate3d(0, var(--sync-y, 0px), 0) scale(var(--sync-scale, 1));
     opacity: var(--sync-o, 1);
-    will-change: transform, opacity;
   }
+
+  .section-shell {
+    background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.005));
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 22px;
+    padding: 28px 26px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .section-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg, transparent 5%, rgba(201,168,76,0.035) 35%, transparent 70%);
+    opacity: 0.22;
+  }
+  .idle-drift {
+    animation: idleDrift 8.5s ease-in-out infinite;
+    animation-delay: var(--idle-delay, 0s);
+  }
+  @keyframes idleDrift {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -2px, 0); }
+  }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 18px;
+    align-items: start;
+    margin-bottom: 10px;
+  }
+  .progress-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 22px;
+  }
+  .routine-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .period-block.is-primary { grid-column: 1 / -1; }
 
   /* ── HEADER ── */
   header {
@@ -224,7 +303,7 @@
     font-family: 'Space Mono', monospace;
     font-size: 11px;
     color: var(--text-dim);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     margin-top: 24px;
     opacity: 0;
     animation: slideIn 0.8s var(--ease) 0.9s forwards;
@@ -284,8 +363,7 @@
     overflow: hidden;
     transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), background var(--dur-mid), box-shadow var(--dur-mid);
     cursor: default;
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
+    transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + 0px), 0);
   }
   .insight-card::before {
     content: '';
@@ -298,7 +376,7 @@
   }
   .insight-card:hover::before { opacity: 1; }
   .insight-card:hover {
-    transform: translate3d(0, var(--lift-y), 0) scale(1.003);
+    transform: var(--tilt-transform, perspective(900px) rotateX(0deg) rotateY(0deg)) translate3d(var(--mx, 0px), calc(var(--my, 0px) + var(--lift-y)), 0) scale(1.003);
     border-color: rgba(201,168,76,0.4);
     background: var(--glass2);
     box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.08) inset;
@@ -340,11 +418,12 @@
   }
 
   .insight-text {
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    line-height: 1.9;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.86;
     color: var(--text-mid);
     font-weight: 400;
+    letter-spacing: 0.002em;
     position: relative;
     z-index: 1;
   }
@@ -369,7 +448,27 @@
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: var(--r-sm);
-    transition: border-color var(--dur-mid), box-shadow var(--dur-mid);
+    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+    transition: border-color var(--dur-mid), box-shadow var(--dur-mid), transform var(--dur-mid) var(--ease-soft);
+  }
+  .progress-helper {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: var(--r-sm);
+    padding: 14px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    line-height: 1.75;
+    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+    transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), background var(--dur-mid);
+  }
+  .progress-helper strong {
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.12em;
   }
   .progress-bar-wrap.is-complete {
     border-color: rgba(201,168,76,0.3);
@@ -412,7 +511,6 @@
     transform: scaleX(0);
     box-shadow: 0 0 12px rgba(201,168,76,0.5);
     position: relative;
-    will-change: transform;
   }
   .progress-fill::after {
     content: '';
@@ -479,6 +577,7 @@
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    min-height: 66px;
   }
   .task-item::before {
     content: '';
@@ -498,6 +597,7 @@
   }
   .task-item:hover::before { transform: scaleY(1); }
   .task-item.is-pressed { transform: translate3d(2px, 0, 0) scale(0.992); }
+  .magnetic { transition: transform 220ms var(--ease-soft); }
 
   .task-item.checked {
     background: rgba(201,168,76,0.04);
@@ -515,7 +615,6 @@
     position: relative;
     transition: border-color 0.4s var(--ease), background 0.4s var(--ease), box-shadow 0.4s;
     background: transparent;
-    will-change: transform;
   }
   .task-check::after {
     content: '';
@@ -562,12 +661,12 @@
     opacity: 0.7;
   }
   .task-title {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--text);
     line-height: 1.4;
     transition: color 0.35s, text-decoration 0.35s;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.004em;
   }
   .task-item.checked .task-title {
     color: var(--text-dim);
@@ -641,7 +740,7 @@
 
   /* ── FOOTER PHILOSOPHY ── */
   .footer-philosophy {
-    margin-top: 64px;
+    margin-top: 10px;
     padding: 52px 48px;
     background: var(--glass);
     backdrop-filter: blur(28px) saturate(1.15);
@@ -651,6 +750,8 @@
     text-align: center;
     position: relative;
     overflow: hidden;
+    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+    transition: transform var(--dur-mid) var(--ease-soft), border-color var(--dur-mid), box-shadow var(--dur-mid);
   }
   .footer-philosophy::before {
     content: '';
@@ -664,7 +765,7 @@
     content: 'REGIME';
     position: absolute;
     bottom: -20px; left: 50%;
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
     font-family: 'Big Shoulders Display', sans-serif;
     font-weight: 900;
     font-size: 120px;
@@ -714,9 +815,12 @@
   }
   .sr.visible {
     opacity: var(--sync-o, 1);
-    transform: translate3d(0, var(--sync-y, 0px), 0) scale(var(--sync-scale, 1));
+    transform: translate3d(var(--mx, 0px), calc(var(--sync-y, 0px) + var(--my, 0px)), 0) scale(var(--sync-scale, 1));
   }
   .sr.sync-node.visible { transition: none; }
+  [data-sync="fg"] { --sync-scale: 1.004; --sync-o: 0.99; }
+  [data-sync="bg"] { --sync-scale: 0.997; --sync-o: 0.975; }
+  [data-sync="stable"] { --sync-scale: 1; --sync-o: 0.985; }
   .sr-delay-1 { transition-delay: 0.08s; }
   .sr-delay-2 { transition-delay: 0.16s; }
   .sr-delay-3 { transition-delay: 0.24s; }
@@ -731,27 +835,46 @@
   @media (max-width: 620px) {
     .wrapper { padding: 0 18px 80px; }
     header { padding: 52px 0 36px; }
+    .section-shell { padding: 20px 16px; border-radius: 16px; margin-bottom: 14px; }
+    .overview-grid { grid-template-columns: 1fr; gap: 12px; }
+    .progress-stack { position: static; top: auto; }
+    .routine-grid { grid-template-columns: 1fr; gap: 10px; }
     .insight-card { padding: 24px 20px; }
     .footer-philosophy { padding: 36px 26px; }
     .task-item { padding: 15px 16px; }
+    .task-item { min-height: 72px; border-color: rgba(255,255,255,0.06); }
+    .task-title { font-size: 14px; line-height: 1.45; }
+    .task-time { font-size: 10px; }
+    .task-sub { font-size: 11px; line-height: 1.6; }
     .progress-bar-wrap { padding: 18px 20px; }
     .period-header { margin-bottom: 12px; }
     .task-list { gap: 8px; }
-    .insight-text { line-height: 1.78; font-size: 14px; }
-    .amb-1 { width: 440px; height: 440px; filter: blur(60px); top: -180px; right: -130px; }
-    .amb-2 { width: 320px; height: 320px; filter: blur(60px); bottom: 3%; left: -110px; }
-    .amb-3 { width: 220px; height: 220px; filter: blur(52px); left: 48%; }
+    .insight-text { line-height: 1.74; font-size: 13.5px; }
+    .amb-1 { width: 360px; height: 360px; filter: blur(36px); top: -160px; right: -120px; opacity: 0.44; }
+    .amb-2 { width: 250px; height: 250px; filter: blur(34px); bottom: 4%; left: -100px; opacity: 0.4; }
+    .amb-3 { display: none; }
+    .bg-halo { opacity: 0.56; animation-duration: 22s; }
+    .insight-card,
+    .progress-bar-wrap,
+    .progress-helper,
+    .footer-philosophy { backdrop-filter: blur(8px) saturate(1.02); -webkit-backdrop-filter: blur(8px) saturate(1.02); }
+    .progress-helper { backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .task-badge { backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .insight-corner { opacity: 0.03; }
     body::before { opacity: 0.28; }
   }
 
   @media (hover: hover) and (pointer: fine) {
     .task-item:hover .task-check { transform: scale(1.06); }
+    .idle-drift:hover { animation-play-state: paused; }
   }
 
   @media (hover: none), (pointer: coarse) {
     .insight-card:hover,
     .task-item:hover { transform: none; }
     .insight-card::before { opacity: 0.5; }
+    .magnetic { transition: none; }
+    .idle-drift { animation-duration: 12s; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -761,7 +884,8 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
-    .ambient, .line-deco { display: none; }
+    .ambient, .line-deco, .bg-halo { display: none; }
+    .idle-drift { animation: none !important; }
   }
 
   /* ── SCROLLBAR ── */
@@ -779,6 +903,7 @@
 <body>
 
 <!-- AMBIENT ORBS -->
+<div class="bg-halo" aria-hidden="true"></div>
 <div class="ambient amb-1"></div>
 <div class="ambient amb-2"></div>
 <div class="ambient amb-3"></div>
@@ -802,11 +927,12 @@
     <div class="header-sub">// rito · ambição · domínio</div>
   </header>
 
-  <!-- INSIGHTS -->
-  <div class="insights-section motion-sync" data-sync="bg" data-depth="0.92">
-    <div class="section-label sr">// pensamento estratégico</div>
+  <section class="overview-grid">
+    <!-- INSIGHTS -->
+    <div class="insights-section motion-sync section-shell idle-drift" data-sync="bg" data-depth="0.92" style="--idle-delay: .2s;">
+      <div class="section-label sr">// pensamento estratégico</div>
 
-    <div class="insight-card sr sr-delay-1">
+    <div class="insight-card sr sr-delay-1 magnetic">
       <div class="insight-corner">"</div>
       <div class="insight-tag">Eternidade & Poder</div>
       <p class="insight-text">
@@ -823,7 +949,7 @@
       </p>
     </div>
 
-    <div class="insight-card sr sr-delay-2">
+    <div class="insight-card sr sr-delay-2 magnetic">
       <div class="insight-corner">$</div>
       <div class="insight-tag">Dinheiro & Liberdade</div>
       <p class="insight-text">
@@ -839,7 +965,7 @@
       </p>
     </div>
 
-    <div class="insight-card sr sr-delay-3">
+    <div class="insight-card sr sr-delay-3 magnetic">
       <div class="insight-corner">∞</div>
       <div class="insight-tag">Natureza Humana</div>
       <p class="insight-text">
@@ -854,27 +980,37 @@
         é escrita pelos que sobrevivem, não pelos que obedeceram.
       </p>
     </div>
-  </div>
+    </div>
+
+    <aside class="progress-stack sr sync-node" data-sync="fg" data-depth="0.96">
+      <!-- PROGRESS -->
+      <div class="progress-bar-wrap section-shell magnetic idle-drift" style="--idle-delay: .9s;">
+        <div class="progress-label">
+          <span>// progresso do dia</span>
+          <span class="progress-pct" id="pctLabel">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="progress-helper magnetic idle-drift" style="--idle-delay: 1.2s;">
+        <strong>ritmo</strong><br/>
+        consistência > intensidade<br/>
+        progresso composto diário
+      </div>
+    </aside>
+  </section>
 
   <div class="divider sr sync-node" data-sync="stable" data-depth="0.75"></div>
 
-  <!-- PROGRESS -->
-  <div class="progress-bar-wrap sr sync-node" data-sync="fg" data-depth="1.02">
-    <div class="progress-label">
-      <span>// progresso do dia</span>
-      <span class="progress-pct" id="pctLabel">0%</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-  </div>
-
   <!-- ROUTINE -->
-  <div style="margin-top: 8px;">
+  <section class="section-shell motion-sync idle-drift" data-sync="stable" data-depth="0.82" style="margin-top: 8px; --idle-delay: 1.4s;">
     <div class="section-label sr sync-node" data-sync="stable" data-depth="0.7">// rotina diária</div>
+    <div class="routine-grid">
 
     <!-- MANHÃ -->
-    <div class="period-block sr sync-node" data-sync="fg" data-depth="1.04">
+    <div class="period-block is-primary sr sync-node" data-sync="fg" data-depth="1.04">
       <div class="period-header">
         <div class="period-icon">🌅</div>
         <div class="period-title">Manhã</div>
@@ -1066,12 +1202,13 @@
       </div>
     </div>
 
-  </div>
+    </div>
+  </section>
 
   <div class="divider sr sync-node" data-sync="stable" data-depth="0.72"></div>
 
   <!-- FOOTER PHILOSOPHY -->
-  <div class="footer-philosophy sr sync-node" data-sync="bg" data-depth="0.86">
+  <div class="footer-philosophy sr sync-node magnetic idle-drift" data-sync="bg" data-depth="0.86" style="--idle-delay: 2s;">
     <p class="fp-quote">
       "O homem que conhece as regras e escolhe quando quebrá-las
       não é nem bom nem mau —
@@ -1227,17 +1364,36 @@
         const py = (e.clientY - rect.top) / rect.height - 0.5;
         const rx = -(py * maxTilt);
         const ry = px * maxTilt;
-        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translate3d(0, -3px, 0) scale(1.003)`;
+        card.style.setProperty('--tilt-transform', `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`);
       }, { passive: true });
       card.addEventListener('pointerleave', () => {
-        card.style.transform = '';
+        card.style.removeProperty('--tilt-transform');
+      }, { passive: true });
+    });
+  }
+
+  function initMagneticHover() {
+    if (!finePointer || reduceMotion) return;
+    const magnets = document.querySelectorAll('.magnetic');
+    magnets.forEach(el => {
+      const strength = el.classList.contains('insight-card') ? 3.1 : 2.4;
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width - 0.5) * strength;
+        const y = ((e.clientY - r.top) / r.height - 0.5) * strength;
+        el.style.setProperty('--mx', `${x.toFixed(2)}px`);
+        el.style.setProperty('--my', `${y.toFixed(2)}px`);
+      }, { passive: true });
+      el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--mx', '0px');
+        el.style.setProperty('--my', '0px');
       }, { passive: true });
     });
   }
 
   function initScrollMotionSystem() {
     const progress = document.getElementById('scrollProgress');
-    const ambients = Array.from(document.querySelectorAll('.ambient'));
+    const bgHalo = document.querySelector('.bg-halo');
     const syncNodes = Array.from(document.querySelectorAll('[data-sync]')).map(el => ({
       el,
       role: el.dataset.sync || 'stable',
@@ -1251,48 +1407,35 @@
     let rafId = null;
     let settleFrames = 0;
     let viewportH = window.innerHeight || 1;
-
-    const recalc = () => {
-      viewportH = window.innerHeight || 1;
-      syncNodes.forEach(node => {
-        const rect = node.el.getBoundingClientRect();
-        node.top = rect.top + (window.scrollY || window.pageYOffset);
-        node.height = rect.height;
-      });
-    };
+    const mobileFactor = coarsePointer ? 0.58 : 1;
 
     const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
     const start = () => {
       if (rafId) return;
+      // will-change sob demanda para reduzir custo constante de composição.
+      syncNodes.forEach(node => { node.el.style.willChange = 'transform, opacity'; });
       rafId = requestAnimationFrame(tick);
     };
 
     const applySyncMotion = (velocity) => {
-      const direction = velocity >= 0 ? 1 : -1;
-      const mobileFactor = coarsePointer ? 0.68 : 1;
-      const centerViewport = smoothY + viewportH * 0.5;
-
+      const direction = velocity > 0 ? 1 : -1;
+      const vel = clamp(velocity, -10, 10);
       syncNodes.forEach(node => {
-        const centerNode = node.top + node.height * 0.5;
-        const normalized = clamp((centerNode - centerViewport) / (viewportH * 0.5), -1.2, 1.2);
-        const proximity = 1 - Math.min(1, Math.abs(normalized));
-        let y = 0;
-
+        let base = 0;
+        let velInfluence = 0;
         if (node.role === 'fg') {
-          y = (-normalized * node.depth * 8.2) + (direction > 0 ? velocity * 0.56 : velocity * 0.34);
+          base = -(smoothY * 0.0022 * node.depth);
+          velInfluence = direction > 0 ? vel * 0.38 : vel * 0.24;
         } else if (node.role === 'bg') {
-          y = (normalized * node.depth * 6.6) + (direction > 0 ? velocity * 0.28 : velocity * 0.46);
+          base = smoothY * 0.0015 * node.depth;
+          velInfluence = direction > 0 ? vel * 0.16 : vel * 0.3;
         } else {
-          y = velocity * 0.18;
+          base = smoothY * 0.0006 * node.depth;
+          velInfluence = vel * 0.1;
         }
-
-        const scale = 1 + (proximity * 0.0065 * node.depth * (node.role === 'fg' ? 1 : 0.72));
-        const opacity = 0.955 + (proximity * 0.045);
-
-        node.el.style.setProperty('--sync-y', `${(y * mobileFactor).toFixed(3)}px`);
-        node.el.style.setProperty('--sync-scale', scale.toFixed(4));
-        node.el.style.setProperty('--sync-o', opacity.toFixed(4));
+        const y = (base + velInfluence) * mobileFactor;
+        node.el.style.setProperty('--sync-y', `${y.toFixed(3)}px`);
       });
     };
 
@@ -1306,11 +1449,9 @@
       progress.style.transform = `scaleX(${scrollPct.toFixed(4)})`;
 
       if (!reduceMotion) {
-        // Camada de background com parallax mínimo, sincronizada com o ritmo geral.
-        ambients.forEach((el, idx) => {
-          const factor = (idx + 1) * 0.014;
-          el.style.transform = `translate3d(0, ${(smoothY * factor).toFixed(3)}px, 0)`;
-        });
+        if (bgHalo) {
+          bgHalo.style.transform = `translate3d(0, ${(smoothY * 0.0042 * mobileFactor).toFixed(3)}px, 0)`;
+        }
         applySyncMotion(velocity);
       }
 
@@ -1319,6 +1460,7 @@
       if (settleFrames < 8) {
         rafId = requestAnimationFrame(tick);
       } else {
+        syncNodes.forEach(node => { node.el.style.willChange = ''; });
         rafId = null;
       }
     };
@@ -1329,14 +1471,14 @@
     };
 
     const onResize = () => {
-      recalc();
+      viewportH = window.innerHeight || 1;
       targetY = window.scrollY || window.pageYOffset;
       smoothY = targetY;
       prevY = smoothY;
       start();
     };
 
-    recalc();
+    viewportH = window.innerHeight || 1;
     start();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
@@ -1347,9 +1489,9 @@
     initScrollReveal();
     initTaskPressFeedback();
     initDepthTilt();
+    initMagneticHover();
     initScrollMotionSystem();
   });
 </script>
 </body>
 </html>
-
