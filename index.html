@@ -1354,298 +1354,195 @@
 </div><!-- /wrapper -->
 
 <script>
-  const STORAGE_KEY = 'rvrenr_regime_v2';
-  const today = new Date().toISOString().split('T')[0];
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const STORAGE_KEY = 'rvrenr_regime_v2';
+const today = new Date().toISOString().split('T')[0];
 
-  let targetProgress = 0;
-  let shownProgress = 0;
-  let progressRaf = null;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-  (function initTitle() {
-    const title = document.getElementById('mainTitle');
-    if (!title) return;
-    const word = 'REGIME';
-    title.innerHTML = '';
-    const goldGroup = document.createElement('span');
-    goldGroup.className = 'gold-word';
-    goldGroup.style.display = 'inline';
+let targetProgress = 0;
+let shownProgress = 0;
+let progressRaf = null;
 
-    word.split('').forEach((ch, i) => {
-      const span = document.createElement('span');
-      span.className = 'char';
-      span.textContent = ch;
-      span.style.animationDelay = (0.06 + i * 0.075) + 's';
-      if (i < 3) goldGroup.appendChild(span);
-      else {
-        if (i === 3) title.appendChild(goldGroup);
-        title.appendChild(span);
-      }
-    });
-  })();
+(function initTitle() {
+  const title = document.getElementById('mainTitle');
+  if (!title) return;
+  const word = 'REGIME';
+  title.innerHTML = '';
 
-  function loadState() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    } catch {
-      return {};
+  const goldGroup = document.createElement('span');
+  goldGroup.className = 'gold-word';
+  goldGroup.style.display = 'inline';
+
+  word.split('').forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = ch;
+    span.style.animationDelay = (0.06 + i * 0.075) + 's';
+
+    if (i < 3) goldGroup.appendChild(span);
+    else {
+      if (i === 3) title.appendChild(goldGroup);
+      title.appendChild(span);
     }
-  }
-
-  function saveState(state) {
-    try {
-      state._date = today;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {}
-  }
-
-  function renderProgress(pct) {
-    const fill = document.getElementById('progressFill');
-    const label = document.getElementById('pctLabel');
-    const wrap = document.querySelector('.progress-bar-wrap');
-    if (!fill || !label || !wrap) return;
-    fill.style.transform = `scaleX(${pct / 100})`;
-    label.textContent = `${Math.round(pct)}%`;
-    fill.classList.toggle('has-progress', pct > 0);
-    wrap.classList.toggle('is-complete', pct >= 100);
-  }
-
-  function animateProgressTo(target) {
-    targetProgress = target;
-    if (progressRaf) return;
-    const tick = () => {
-      shownProgress += (targetProgress - shownProgress) * 0.16;
-      if (Math.abs(targetProgress - shownProgress) < 0.08) {
-        shownProgress = targetProgress;
-      }
-      renderProgress(shownProgress);
-      if (shownProgress !== targetProgress) {
-        progressRaf = requestAnimationFrame(tick);
-      } else {
-        progressRaf = null;
-      }
-    };
-    progressRaf = requestAnimationFrame(tick);
-  }
-
-  function updateProgress() {
-    const items = document.querySelectorAll('.task-item');
-    const checked = document.querySelectorAll('.task-item.checked').length;
-    const pct = Math.round((checked / items.length) * 100);
-    animateProgressTo(pct);
-  }
-
-  function toggleTask(el) {
-    const wasChecked = el.classList.contains('checked');
-    el.classList.toggle('checked');
-    if (!wasChecked) {
-      el.classList.add('just-checked');
-      setTimeout(() => el.classList.remove('just-checked'), 600);
-    }
-    const id = el.dataset.id;
-    const state = loadState();
-    state[id] = el.classList.contains('checked');
-    saveState(state);
-    updateProgress();
-  }
-
-  function restoreState() {
-    const state = loadState();
-    document.querySelectorAll('.task-item').forEach(el => {
-      if (state[el.dataset.id]) el.classList.add('checked');
-    });
-    updateProgress();
-  }
-
-  function initScrollReveal() {
-    const els = document.querySelectorAll('.sr');
-    els.forEach((el, i) => {
-      // Stagger dinâmico para dar sensação de fluxo contínuo entre blocos.
-      el.style.transitionDelay = `${Math.min(280, i * 28)}ms`;
-    });
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.09, rootMargin: '0px 0px -10% 0px' });
-    els.forEach(el => observer.observe(el));
-  }
-
-  function initTaskPressFeedback() {
-    const items = document.querySelectorAll('.task-item');
-    items.forEach(item => {
-      let safetyTimer = null;
-      const clear = () => {
-        item.classList.remove('is-pressed');
-        if (safetyTimer) {
-          clearTimeout(safetyTimer);
-          safetyTimer = null;
-        }
-      };
-      const press = () => {
-        item.classList.add('is-pressed');
-        if (safetyTimer) clearTimeout(safetyTimer);
-        // iOS/WebKit sometimes misses an end event; this guarantees no “stuck” state.
-        safetyTimer = setTimeout(clear, 140);
-      };
-
-      item.addEventListener('pointerdown', press, { passive: true });
-      item.addEventListener('pointerup', clear, { passive: true });
-      item.addEventListener('pointercancel', clear, { passive: true });
-      item.addEventListener('pointerleave', clear, { passive: true });
-      item.addEventListener('touchend', clear, { passive: true });
-      item.addEventListener('touchcancel', clear, { passive: true });
-    });
-  }
-
-  function initDepthTilt() {
-    // Insight cards are intentionally non-interactive surfaces.
-    return;
-    if (!finePointer || reduceMotion) return;
-    const cards = document.querySelectorAll('.insight-card[data-interactive="true"]');
-    cards.forEach(card => {
-      const maxTilt = 3.2;
-      card.addEventListener('pointermove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const px = (e.clientX - rect.left) / rect.width - 0.5;
-        const py = (e.clientY - rect.top) / rect.height - 0.5;
-        const rx = -(py * maxTilt);
-        const ry = px * maxTilt;
-        card.style.setProperty('--tilt-transform', `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`);
-      }, { passive: true });
-      card.addEventListener('pointerleave', () => {
-        card.style.removeProperty('--tilt-transform');
-      }, { passive: true });
-    });
-  }
-
-  function initMagneticHover() {
-    if (!finePointer || reduceMotion) return;
-    const magnets = document.querySelectorAll('.magnetic');
-    magnets.forEach(el => {
-      const strength = 2.4;
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        const x = ((e.clientX - r.left) / r.width - 0.5) * strength;
-        const y = ((e.clientY - r.top) / r.height - 0.5) * strength;
-        el.style.setProperty('--mx', `${x.toFixed(2)}px`);
-        el.style.setProperty('--my', `${y.toFixed(2)}px`);
-      }, { passive: true });
-      el.addEventListener('pointerleave', () => {
-        el.style.setProperty('--mx', '0px');
-        el.style.setProperty('--my', '0px');
-      }, { passive: true });
-    });
-  }
-
-  function initScrollMotionSystem() {
-    const progress = document.getElementById('scrollProgress');
-    const bgHalo = document.querySelector('.bg-halo');
-    const syncNodes = Array.from(document.querySelectorAll('[data-sync]')).map(el => ({
-      el,
-      role: el.dataset.sync || 'stable',
-      depth: Math.max(0.45, Math.min(1.35, parseFloat(el.dataset.depth || '1')))
-    }));
-    if (!progress) return;
-
-    let targetY = window.scrollY || window.pageYOffset;
-    let smoothY = targetY;
-    let prevY = smoothY;
-    let rafId = null;
-    let settleFrames = 0;
-    let viewportH = window.innerHeight || 1;
-    const mobileFactor = coarsePointer ? 0.58 : 1;
-
-    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-
-    const start = () => {
-      if (rafId) return;
-      // will-change sob demanda para reduzir custo constante de composição.
-      syncNodes.forEach(node => { node.el.style.willChange = 'transform, opacity'; });
-      if (bgHalo) bgHalo.style.willChange = 'transform, opacity';
-      rafId = requestAnimationFrame(tick);
-    };
-
-    const applySyncMotion = (velocity) => {
-      const direction = velocity > 0 ? 1 : -1;
-      const vel = clamp(velocity, -10, 10);
-      syncNodes.forEach(node => {
-        let base = 0;
-        let velInfluence = 0;
-        if (node.role === 'fg') {
-          base = -(smoothY * 0.0022 * node.depth);
-          velInfluence = direction > 0 ? vel * 0.38 : vel * 0.24;
-        } else if (node.role === 'bg') {
-          base = smoothY * 0.0015 * node.depth;
-          velInfluence = direction > 0 ? vel * 0.16 : vel * 0.3;
-        } else {
-          base = smoothY * 0.0006 * node.depth;
-          velInfluence = vel * 0.1;
-        }
-        const y = (base + velInfluence) * mobileFactor;
-        node.el.style.setProperty('--sync-y', `${y.toFixed(3)}px`);
-      });
-    };
-
-    const tick = () => {
-      smoothY += (targetY - smoothY) * 0.14;
-      const velocity = smoothY - prevY;
-      prevY = smoothY;
-
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportH);
-      const scrollPct = clamp(smoothY / maxScroll, 0, 1);
-      progress.style.transform = `scaleX(${scrollPct.toFixed(4)})`;
-
-      if (!reduceMotion) {
-        if (bgHalo) {
-          bgHalo.style.transform = `translate3d(0, ${(smoothY * 0.0042 * mobileFactor).toFixed(3)}px, 0)`;
-        }
-        applySyncMotion(velocity);
-      }
-
-      const settled = Math.abs(targetY - smoothY) < 0.08 && Math.abs(velocity) < 0.04;
-      settleFrames = settled ? settleFrames + 1 : 0;
-      if (settleFrames < 8) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        syncNodes.forEach(node => { node.el.style.willChange = ''; });
-        if (bgHalo) bgHalo.style.willChange = '';
-        rafId = null;
-      }
-    };
-
-    const onScroll = () => {
-      targetY = window.scrollY || window.pageYOffset;
-      start();
-    };
-
-    const onResize = () => {
-      viewportH = window.innerHeight || 1;
-      targetY = window.scrollY || window.pageYOffset;
-      smoothY = targetY;
-      prevY = smoothY;
-      start();
-    };
-
-    viewportH = window.innerHeight || 1;
-    start();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize, { passive: true });
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    restoreState();
-    initScrollReveal();
-    initTaskPressFeedback();
-    initDepthTilt();
-    initMagneticHover();
-    initScrollMotionSystem();
   });
+})();
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveState(state) {
+  try {
+    state._date = today;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {}
+}
+
+function renderProgress(pct) {
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('pctLabel');
+  const wrap = document.querySelector('.progress-bar-wrap');
+  if (!fill || !label || !wrap) return;
+
+  fill.style.transform = `scaleX(${pct / 100})`;
+  label.textContent = `${Math.round(pct)}%`;
+
+  fill.classList.toggle('has-progress', pct > 0);
+  wrap.classList.toggle('is-complete', pct >= 100);
+}
+
+function animateProgressTo(target) {
+  targetProgress = target;
+  if (progressRaf) return;
+
+  const tick = () => {
+    shownProgress += (targetProgress - shownProgress) * 0.16;
+
+    if (Math.abs(targetProgress - shownProgress) < 0.08) {
+      shownProgress = targetProgress;
+    }
+
+    renderProgress(shownProgress);
+
+    if (shownProgress !== targetProgress) {
+      progressRaf = requestAnimationFrame(tick);
+    } else {
+      progressRaf = null;
+    }
+  };
+
+  progressRaf = requestAnimationFrame(tick);
+}
+
+function updateProgress() {
+  const items = document.querySelectorAll('.task-item');
+  const checked = document.querySelectorAll('.task-item.checked').length;
+  const pct = Math.round((checked / items.length) * 100);
+  animateProgressTo(pct);
+}
+
+function toggleTask(el) {
+  const wasChecked = el.classList.contains('checked');
+  el.classList.toggle('checked');
+
+  if (!wasChecked) {
+    el.classList.add('just-checked');
+    setTimeout(() => el.classList.remove('just-checked'), 600);
+  }
+
+  const id = el.dataset.id;
+  const state = loadState();
+  state[id] = el.classList.contains('checked');
+  saveState(state);
+
+  updateProgress();
+}
+
+function restoreState() {
+  const state = loadState();
+  document.querySelectorAll('.task-item').forEach(el => {
+    if (state[el.dataset.id]) el.classList.add('checked');
+  });
+  updateProgress();
+}
+
+function initScrollReveal() {
+  const els = document.querySelectorAll('.sr');
+
+  els.forEach((el, i) => {
+    el.style.transitionDelay = `${Math.min(280, i * 28)}ms`;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.09, rootMargin: '0px 0px -10% 0px' });
+
+  els.forEach(el => observer.observe(el));
+}
+
+function initTaskPressFeedback() {
+  const items = document.querySelectorAll('.task-item');
+
+  items.forEach(item => {
+    let timer = null;
+
+    const clear = () => {
+      item.classList.remove('is-pressed');
+      if (timer) clearTimeout(timer);
+    };
+
+    const press = () => {
+      item.classList.add('is-pressed');
+      timer = setTimeout(clear, 140);
+    };
+
+    item.addEventListener('pointerdown', press, { passive: true });
+    item.addEventListener('pointerup', clear, { passive: true });
+    item.addEventListener('pointercancel', clear, { passive: true });
+    item.addEventListener('pointerleave', clear, { passive: true });
+    item.addEventListener('touchend', clear, { passive: true });
+  });
+}
+
+function initScrollMotionSystem() {
+  const progress = document.getElementById('scrollProgress');
+  if (!progress) return;
+
+  let targetY = window.scrollY;
+  let smoothY = targetY;
+
+  const tick = () => {
+    smoothY += (targetY - smoothY) * 0.14;
+
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = Math.max(0, Math.min(1, smoothY / maxScroll));
+
+    progress.style.transform = `scaleX(${pct})`;
+
+    requestAnimationFrame(tick);
+  };
+
+  window.addEventListener('scroll', () => {
+    targetY = window.scrollY;
+  }, { passive: true });
+
+  tick();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  restoreState();
+  initScrollReveal();
+  initTaskPressFeedback();
+  initScrollMotionSystem();
+});
 </script>
 </body>
 </html>
