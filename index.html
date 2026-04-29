@@ -278,7 +278,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
+  /* Manhã ocupa linha inteira — é o bloco âncora do dia */
   .period-block.is-primary { grid-column: 1 / -1; }
+  /* Meio da manhã também full-width por ter contexto de transição */
+  .period-block.is-wide    { grid-column: 1 / -1; }
 
   /* ── HEADER ── */
   header {
@@ -315,39 +318,71 @@
   }
   .watermark a:hover { opacity: 1; }
 
-  /* ── MAIN TITLE — Big Shoulders Display mantida ── */
+  /* ══════════════════════════════════════════════════════════
+     TITLE SYSTEM — iOS Safari fix
+     
+     Bug: background-clip:text + -webkit-text-fill-color:transparent
+     em .char com opacity:0 animado → texto invisível no Safari iOS.
+     
+     Solução: duas linhas independentes (.title-line-1 / .title-line-2).
+     Cada linha anima como bloco (opacity+transform), não letra por letra.
+     O gradiente prata vai no .title-line-1 via background-clip no container,
+     com -webkit-text-fill-color aplicado APÓS a animação terminar via classe .revealed.
+     Durante a animação, a cor é var(--text) normal — sem clip.
+     
+     Resultado: sem bug iOS, visual idêntico, animação fluida.
+  ══════════════════════════════════════════════════════════ */
   .main-title {
     font-family: 'Big Shoulders Display', sans-serif;
     font-weight: 900;
-    /* Título mais compacto para o nome novo ser legível no mobile */
-    font-size: clamp(42px, 9vw, 96px);
-    letter-spacing: -0.02em;
-    line-height: 0.92;
-    color: var(--text);
-    margin-bottom: 20px;
-    overflow: hidden;
+    letter-spacing: -0.025em;
+    line-height: 0.88;
+    margin-bottom: 24px;
+    /* sem overflow:hidden — permite que as linhas respirem */
   }
-  .main-title .char {
-    display: inline-block;
+
+  /* Linha 1: "The Sinarchbishop" — maior, acento prata */
+  .title-line-1 {
+    display: block;
+    font-size: clamp(38px, 10.5vw, 112px);
+    color: var(--text); /* cor segura durante animação */
     opacity: 0;
-    transform: translateY(60px) skewX(-8deg);
-    filter: blur(6px);
-    animation: charReveal 0.7s var(--ease) forwards;
+    transform: translateY(48px) skewX(-6deg);
+    filter: blur(8px);
+    animation: titleLineReveal 0.85s var(--ease) 0.08s forwards;
     will-change: transform, opacity, filter;
+    /* transition para a cor pós-animação */
+    transition: color 0.4s ease 0.1s;
   }
-  /* Acento prata fria — mais refinado que gold, mais austero */
-  .main-title .silver-word {
+  /* Aplica gradiente SOMENTE após animação — evita bug iOS */
+  .title-line-1.revealed {
     background: linear-gradient(135deg,
-      var(--silver-dim) 0%,
-      var(--silver) 40%,
-      var(--silver-bright) 70%,
-      var(--silver) 100%
+      var(--silver-dim)    0%,
+      var(--silver)        38%,
+      var(--silver-bright) 65%,
+      var(--silver)        100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  @keyframes charReveal {
+
+  /* Linha 2: "of Pride" — menor, branco frio, tracking negativo */
+  .title-line-2 {
+    display: block;
+    font-size: clamp(28px, 7.5vw, 80px);
+    color: rgba(236,237,242,0.72);
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(36px) skewX(-4deg);
+    filter: blur(6px);
+    animation: titleLineReveal 0.85s var(--ease) 0.32s forwards;
+    will-change: transform, opacity, filter;
+    /* Pequeno indent para criar hierarquia visual */
+    padding-left: 0.06em;
+  }
+
+  @keyframes titleLineReveal {
     to { opacity: 1; transform: translateY(0) skewX(0); filter: blur(0); }
   }
 
@@ -1113,7 +1148,9 @@
   @media (max-width: 620px) {
     .wrapper { padding: 0 18px 80px; }
     header { padding: 52px 0 36px; }
-    .main-title { font-size: clamp(32px, 8vw, 68px); line-height: 0.9; }
+    /* Título mobile: duas linhas compactas mas com presença */
+    .title-line-1 { font-size: clamp(34px, 11vw, 52px); }
+    .title-line-2 { font-size: clamp(24px, 8vw, 38px); }
     .section-shell { padding: 20px 16px; border-radius: 14px; margin-bottom: 12px; }
     .section-shell::before { border-radius: 14px; }
     .overview-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -1197,8 +1234,11 @@
       <a href="https://instagram.com/rvrenr" target="_blank" rel="noopener">@rvrenr</a>
     </div>
 
-    <!-- Título atualizado — script também atualizado abaixo ── -->
-    <h1 class="main-title" id="mainTitle" aria-label="The Sinarchbishop of Pride"></h1>
+    <!-- Título em duas linhas — iOS Safari safe, sem background-clip em chars animados -->
+    <h1 class="main-title" aria-label="The Sinarchbishop of Pride">
+      <span class="title-line-1" id="titleLine1">The Sinarchbishop</span>
+      <span class="title-line-2" id="titleLine2">of Pride</span>
+    </h1>
 
     <div class="header-sub">// rito · ambição · domínio</div>
   </header>
@@ -1394,12 +1434,11 @@
         <div class="task-item" data-id="t1" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">09:00</div>
+            <div class="task-time">05:30</div>
             <div class="task-title">Acordar</div>
             <div class="task-sub">
-              <span>Água imediatamente</span>
-              <span>Banheiro</span>
-              <span>Zero redes sociais</span>
+              <span>Água, banheiro</span>
+              <span>Nenhuma rede social</span>
             </div>
           </div>
         </div>
@@ -1407,7 +1446,7 @@
         <div class="task-item" data-id="t2" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">09:10 – 09:25</div>
+            <div class="task-time">05:40 – 05:55</div>
             <div class="task-title">Escrita Curta</div>
             <div class="task-sub">
               <span>Como estou agora</span>
@@ -1420,7 +1459,7 @@
         <div class="task-item" data-id="t3" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">09:25 – 09:40</div>
+            <div class="task-time">05:55 – 06:10</div>
             <div class="task-title">Reafirmação do Vetor Final</div>
             <div class="task-sub">
               <span>Exposição solar</span>
@@ -1433,7 +1472,7 @@
         <div class="task-item" data-id="t4" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">09:40 – 10:20</div>
+            <div class="task-time">06:10 – 06:50</div>
             <div class="task-title">Leitura</div>
             <div class="task-sub">
               <span>Apenas um tema por sessão</span>
@@ -1446,8 +1485,8 @@
         <div class="task-item" data-id="t5" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">10:20 – 12:00</div>
-            <div class="task-title">Bloco Produtivo</div>
+            <div class="task-time">06:50 – 08:30</div>
+            <div class="task-title">Bloco Produtivo Profundo</div>
             <div class="task-sub">
               <span>Estudar algo aplicável</span>
               <span>ou procurar / executar algo que gere renda</span>
@@ -1458,16 +1497,16 @@
         </div>
 
         <div class="blocker-notice sr">
-          Instagram e WhatsApp bloqueados até 12:00
+          Instagram e WhatsApp bloqueados até 08:30
         </div>
       </div>
     </div>
 
-    <!-- TARDE -->
-    <div class="period-block sr sr-delay-1">
+    <!-- MEIO DA MANHÃ -->
+    <div class="period-block is-wide sr sr-delay-1">
       <div class="period-header">
-        <div class="period-icon">☀️</div>
-        <div class="period-title">Tarde</div>
+        <div class="period-icon">☕</div>
+        <div class="period-title">Meio da Manhã</div>
         <div class="period-line"></div>
       </div>
       <div class="task-list">
@@ -1475,7 +1514,7 @@
         <div class="task-item" data-id="t6" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">12:00</div>
+            <div class="task-time">08:30</div>
             <div class="task-title">Liberar Mensagens</div>
             <div class="task-sub">
               <span>Uso consciente e intencional</span>
@@ -1486,8 +1525,8 @@
         <div class="task-item" data-id="t7" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">12:30</div>
-            <div class="task-title">Almoço</div>
+            <div class="task-time">09:00</div>
+            <div class="task-title">Café / Refeição Principal</div>
             <div class="task-sub">
               <span>Sem tela</span>
               <span>Presença total</span>
@@ -1498,7 +1537,31 @@
         <div class="task-item" data-id="t8" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">14:00 – 15:00</div>
+            <div class="task-time">09:30 – 11:30</div>
+            <div class="task-title">Segundo Bloco Produtivo</div>
+            <div class="task-sub">
+              <span>Execução, continuidade ou trabalho</span>
+            </div>
+          </div>
+          <div class="task-badge">execução</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TARDE -->
+    <div class="period-block sr sr-delay-2">
+      <div class="period-header">
+        <div class="period-icon">☀️</div>
+        <div class="period-title">Tarde</div>
+        <div class="period-line"></div>
+      </div>
+      <div class="task-list">
+
+        <div class="task-item" data-id="t9" onclick="toggleTask(this)">
+          <div class="task-check"><div class="ripple-ring"></div></div>
+          <div class="task-body">
+            <div class="task-time">13:00 – 14:00</div>
             <div class="task-title">Movimento Físico</div>
             <div class="task-sub">
               <span>Caminhada · Treino · Alongamento</span>
@@ -1507,10 +1570,10 @@
           <div class="task-badge">corpo</div>
         </div>
 
-        <div class="task-item" data-id="t9" onclick="toggleTask(this)">
+        <div class="task-item" data-id="t10" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">16:00 – 17:00</div>
+            <div class="task-time">15:30 – 16:30</div>
             <div class="task-title">Bloco Leve</div>
             <div class="task-sub">
               <span>Ajustes e revisões</span>
@@ -1520,11 +1583,24 @@
           </div>
         </div>
 
+        <div class="task-item" data-id="t11" onclick="toggleTask(this)">
+          <div class="task-check"><div class="ripple-ring"></div></div>
+          <div class="task-body">
+            <div class="task-time">17:00 – 18:00</div>
+            <div class="task-title">Janela Opcional</div>
+            <div class="task-sub">
+              <span>Resolver pendências</span>
+              <span>Renda · Tarefas práticas</span>
+            </div>
+          </div>
+          <div class="task-badge">livre</div>
+        </div>
+
       </div>
     </div>
 
     <!-- NOITE -->
-    <div class="period-block sr sr-delay-2">
+    <div class="period-block sr sr-delay-3">
       <div class="period-header">
         <div class="period-icon">🌙</div>
         <div class="period-title">Noite</div>
@@ -1532,10 +1608,10 @@
       </div>
       <div class="task-list">
 
-        <div class="task-item" data-id="t10" onclick="toggleTask(this)">
+        <div class="task-item" data-id="t12" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">21:30 – 21:50</div>
+            <div class="task-time">20:30 – 20:50</div>
             <div class="task-title">Escrita Diária</div>
             <div class="task-sub">
               <span>O que fiz</span>
@@ -1547,10 +1623,10 @@
           <div class="task-badge">reflexão</div>
         </div>
 
-        <div class="task-item" data-id="t11" onclick="toggleTask(this)">
+        <div class="task-item" data-id="t13" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">22:00</div>
+            <div class="task-time">21:00</div>
             <div class="task-title">Desacelerar</div>
             <div class="task-sub">
               <span>Luz baixa</span>
@@ -1559,13 +1635,24 @@
           </div>
         </div>
 
-        <div class="task-item" data-id="t12" onclick="toggleTask(this)">
+        <div class="task-item" data-id="t14" onclick="toggleTask(this)">
           <div class="task-check"><div class="ripple-ring"></div></div>
           <div class="task-body">
-            <div class="task-time">00:00 – 00:30</div>
-            <div class="task-title">Dormir</div>
+            <div class="task-time">22:00</div>
+            <div class="task-title">Preparação para Dormir</div>
             <div class="task-sub">
               <span>Celular fora da cama</span>
+              <span>Nada de telas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-item" data-id="t15" onclick="toggleTask(this)">
+          <div class="task-check"><div class="ripple-ring"></div></div>
+          <div class="task-body">
+            <div class="task-time">23:00</div>
+            <div class="task-title">Dormir</div>
+            <div class="task-sub">
               <span>Recuperação total</span>
             </div>
           </div>
@@ -1621,47 +1708,17 @@
   let shownProgress  = 0;
   let progressRaf    = null;
 
-  /* ── TITLE REVEAL — nome completo com acento prata nas primeiras palavras ── */
+  /* ── TITLE — iOS Safari safe gradient apply ──
+     Aplica background-clip:text SOMENTE após a animação terminar.
+     Durante a animação, texto usa cor normal (sem clip) — evita bug iOS.
+  */
   (function initTitle() {
-    const title = document.getElementById('mainTitle');
-    if (!title) return;
-
-    /*
-      Estratégia: "The Sinarchbishop" recebe a classe silver-word (gradiente prata),
-      "of Pride" fica em var(--text) branco frio.
-      Cada letra entra com charReveal escalonado.
-    */
-    const fullName  = 'The Sinarchbishop of Pride';
-    const accentEnd = 'The Sinarchbishop'.length; // índice do espaço antes de "of"
-
-    title.innerHTML = '';
-
-    const silverGroup = document.createElement('span');
-    silverGroup.className = 'silver-word';
-    silverGroup.style.display = 'inline';
-
-    let charIndex = 0;
-    let inSilver  = true;
-
-    fullName.split('').forEach((ch, i) => {
-      const span = document.createElement('span');
-      span.className = 'char';
-      span.textContent = ch === ' ' ? '\u00A0' : ch; // nbsp para espaços
-      span.style.animationDelay = (0.04 + charIndex * 0.038) + 's';
-      charIndex++;
-
-      if (i < accentEnd) {
-        silverGroup.appendChild(span);
-      } else {
-        if (inSilver) {
-          title.appendChild(silverGroup);
-          inSilver = false;
-        }
-        title.appendChild(span);
-      }
-    });
-
-    if (inSilver) title.appendChild(silverGroup); // fallback
+    const line1 = document.getElementById('titleLine1');
+    if (!line1) return;
+    // Após a animação da linha 1 terminar, aplica o gradiente prata
+    line1.addEventListener('animationend', () => {
+      line1.classList.add('revealed');
+    }, { once: true });
   })();
 
   /* ── STATE PERSISTENCE ── */
