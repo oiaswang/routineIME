@@ -345,16 +345,14 @@
   .title-line-1 {
     display: block;
     font-size: clamp(38px, 10.5vw, 112px);
-    color: var(--text); /* cor segura durante animação */
+    color: var(--text);
     opacity: 0;
     transform: translateY(48px) skewX(-6deg);
     filter: blur(8px);
-    animation: titleLineReveal 0.85s var(--ease) 0.08s forwards;
+    animation: titleLineReveal 0.85s var(--ease) 0.05s forwards;
     will-change: transform, opacity, filter;
-    /* transition para a cor pós-animação */
-    transition: color 0.4s ease 0.1s;
+    transition: color 0.01s, -webkit-text-fill-color 0.01s;
   }
-  /* Aplica gradiente SOMENTE após animação — evita bug iOS */
   .title-line-1.revealed {
     background: linear-gradient(135deg,
       var(--silver-dim)    0%,
@@ -367,7 +365,6 @@
     background-clip: text;
   }
 
-  /* Linha 2: "of Pride" — menor, branco frio, tracking negativo */
   .title-line-2 {
     display: block;
     font-size: clamp(28px, 7.5vw, 80px);
@@ -376,9 +373,8 @@
     opacity: 0;
     transform: translateY(36px) skewX(-4deg);
     filter: blur(6px);
-    animation: titleLineReveal 0.85s var(--ease) 0.32s forwards;
+    animation: titleLineReveal 0.85s var(--ease) 0.22s forwards;
     will-change: transform, opacity, filter;
-    /* Pequeno indent para criar hierarquia visual */
     padding-left: 0.06em;
   }
 
@@ -796,12 +792,16 @@
     border-radius: 50%;
     border: 1px solid var(--silver-line);
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--silver-dim);
     background: var(--silver-glass);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     flex-shrink: 0;
-    transition: border-color var(--dur-mid), box-shadow var(--dur-mid);
+    transition: border-color var(--dur-mid), box-shadow var(--dur-mid), color var(--dur-mid);
   }
   .period-header:hover .period-icon {
     border-color: rgba(200,203,212,0.28);
@@ -1425,7 +1425,7 @@
     <!-- MANHÃ -->
     <div class="period-block is-primary sr">
       <div class="period-header">
-        <div class="period-icon">🌅</div>
+        <div class="period-icon">01</div>
         <div class="period-title">Manhã</div>
         <div class="period-line"></div>
       </div>
@@ -1505,7 +1505,7 @@
     <!-- MEIO DA MANHÃ -->
     <div class="period-block is-wide sr sr-delay-1">
       <div class="period-header">
-        <div class="period-icon">☕</div>
+        <div class="period-icon">02</div>
         <div class="period-title">Meio da Manhã</div>
         <div class="period-line"></div>
       </div>
@@ -1552,7 +1552,7 @@
     <!-- TARDE -->
     <div class="period-block sr sr-delay-2">
       <div class="period-header">
-        <div class="period-icon">☀️</div>
+        <div class="period-icon">03</div>
         <div class="period-title">Tarde</div>
         <div class="period-line"></div>
       </div>
@@ -1602,7 +1602,7 @@
     <!-- NOITE -->
     <div class="period-block sr sr-delay-3">
       <div class="period-header">
-        <div class="period-icon">🌙</div>
+        <div class="period-icon">04</div>
         <div class="period-title">Noite</div>
         <div class="period-line"></div>
       </div>
